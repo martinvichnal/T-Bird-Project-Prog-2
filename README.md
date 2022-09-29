@@ -1,31 +1,48 @@
 # T-Bird-Project
  Ez a projekt a Programozás 2 a Gyakorlatban miatt jött létre.
 
-# AVR-projects
 
+-----------------------------------------------------
 # Programming Setup
-I almost always use AVRISPmkII and AVRdude (launched from a batch script) to program my chips. I virtually never use AVRStudio. I typically develop in a Windows environment, but the code (and AVRdude) works the same in Linux.
+
 
 
 ### Software
-* 
+* Microchip Studio AVR Programmer
 
-### Hardware
-* [AVR Programming in 64-bit Windows 7](http://www.swharden.com/wp/2013-05-07-avr-programming-in-64-bit-windows-7/) (should also work for windows 10)
+### Hardware - T-BIRD EXPBRD 4
+* ATMEL AVR - Atmega128 mikrokontrolleler
+* USB - soros átalakító
+* Valós idejű óra (RTC - Real Time Clock, PCF8563)
+* Piezzo buzzer
+* Analóg hőmérséklet szenzor (LM35)
+* RS-485 interfész (SN75176, belső védelemmel)
+* USB és külső tápellátás lehetőség
+* 5 db nyomógomb
+* 8 db LED
+* Integrált JTAG debugger (JTAG ICE)
+* Védőbiztosíték
+* Digitál - Analóg Átalakító
+#### Accessory:
+* HD44780 kompatibilis 16x4-es LCD kijelző
+* 4db 7szegmenses kijelző
+* 4x3-as mátrix billentyűzet
+* RGB LED
+*LM35 hőszenzor
 
-## Common AVR Datasheets and Pinouts
+### AVR - Atmega128 Pinout:
 
-chip|pinout|datasheets
----|---|---
-**ATMega328**|<img width="300" src="resources/ATMega328.png">|[[summary](http://www.atmel.com/Images/Atmel-42735-8-bit-AVR-Microcontroller-ATmega328-328P_Summary.pdf)] [[complete](http://www.atmel.com/Images/Atmel-42735-8-bit-AVR-Microcontroller-ATmega328-328P_Datasheet.pdf)]
-**ATTiny2313**|<img width="300" src="resources/ATTiny2313.png">|[[summary](http://www.atmel.com/Images/8246S.pdf)] [[complete](http://www.atmel.com/Images/doc8246.pdf)]|<img width="300" src="resources/ATMega328.png">
-**ATTiny45**|<img width="300" src="resources/ATTiny45.png">|[[summary](http://www.atmel.com/Images/Atmel-2586-AVR-8-bit-Microcontroller-ATtiny25-ATtiny45-ATtiny85_Datasheet-Summary.pdf)] [[complete](http://www.atmel.com/Images/Atmel-2586-AVR-8-bit-Microcontroller-ATtiny25-ATtiny45-ATtiny85_Datasheet.pdf)]|<img width="300" src="resources/ATMega328.png)
+chip|pinout
+---|---
+**ATMega128**|<img width="300" src="resources/ATMega328.png">|
 
-# Helpful Links
+-----------------------------------------------------
+# Links
 * [AVR fuse calculator](http://www.engbedded.com/fusecalc)
 * [AVR timer calculator](http://eleccelerator.com/avr-timer-calculator/)
 
-## Misc Code
+-----------------------------------------------------
+# Usefull code parts
 
 ### Reading pins
 ```C
