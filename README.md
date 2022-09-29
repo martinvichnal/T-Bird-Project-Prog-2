@@ -32,9 +32,11 @@
 
 ### AVR - Atmega128 Pinout:
 
-chip|pinout
----|---
-**ATMega128**|<img width="300" src="resources/ATMega328.png">|
+Chip|Pinout|Datasheet
+---|---|---
+**ATMega128**|<img width="300" src="resources/atmega128_pinout.png">|[[summary](https://ww1.microchip.com/downloads/en/DeviceDoc/doc2467.pdf)]
+
+
 
 -----------------------------------------------------
 # Links
