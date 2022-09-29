@@ -34,17 +34,28 @@
 
 Chip|Pinout|Datasheet
 ---|---|---
-**ATMega128**|<img width="300" src="resources/atmega128_pinout.png">|[[summary](https://ww1.microchip.com/downloads/en/DeviceDoc/doc2467.pdf)]
+**ATMega128**|<img width="300" src="resources/atmega128_pinout.png">|[[link](https://ww1.microchip.com/downloads/en/DeviceDoc/doc2467.pdf)]
 
 
 
 -----------------------------------------------------
-# Links
+# References, Useful links
 * [AVR fuse calculator](http://www.engbedded.com/fusecalc)
 * [AVR timer calculator](http://eleccelerator.com/avr-timer-calculator/)
 
 -----------------------------------------------------
 # Usefull code parts
+
+### CPU Speed
+```C
+#define F_CPU 8000000L
+```
+
+### CPU Speed
+```C
+#include <avr/io.h>
+#include <util/delay.h>
+```
 
 ### Reading pins
 ```C
