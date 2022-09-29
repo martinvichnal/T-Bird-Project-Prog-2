@@ -4,6 +4,10 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
+void waitMs1(){_delay_ms(1);}
+void waitMs(int ms){while (ms-->0){waitMs1();}}
+void waitSec(int sec){while (sec-->0){waitMs(1000);}}
+
 void port_inti();
 void ledOut(uint8_t leds);
 void balra_fut();
@@ -16,31 +20,30 @@ uint8_t leds1 = 0x01;
 uint8_t leds2 = 0x80;
 uint8_t irany = 0x01;
 
+int d = 500; // base delay time number
+
 int main(void)
 {
-	// DDRB = 0xF0;
-	// PORTB = 0xF0;
 	port_inti();
 
 	while (1)
 	{
-		if(PING == 0x01)
+		if (PING == 0x02) // if the 2. button is pressed increase by 100
 		{
-			ledOut(leds);
-			_delay_ms(500);
-
-			// balra_jobbra_fut();
-
-			// balra_fut();
-			// jobbra_fut();
-
-			// leds = leds<<1;
-			// leds = leds^0x33; //XOR
-			// PORTB = 0x00;
-			//_delay_ms(500);
-
-			knight_rider();
+			d += 50;
+			if (d > 10000) // delay protection
+				d = 10000;
 		}
+		if (PING == 0x01) // if the 1. button is pressed decrease by 100
+		{
+			d -= 50;
+			if (d < 50) // delay protection
+				d = 50;
+		}
+		ledOut(leds);
+
+		waitMs(d);
+		knight_rider();
 	}
 }
 

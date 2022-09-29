@@ -3,29 +3,29 @@ T-Bird-Project.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000004  00800100  00000134  000001a8  2**0
+  0 .data         00000006  00800100  000001a2  00000216  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000134  00000000  00000000  00000074  2**1
+  1 .text         000001a2  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  000001ac  2**0
+  2 .comment      00000030  00000000  00000000  0000021c  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001dc  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000024c  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000050  00000000  00000000  00000218  2**0
+  4 .debug_aranges 00000068  00000000  00000000  00000288  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000987  00000000  00000000  00000268  2**0
+  5 .debug_info   00000a28  00000000  00000000  000002f0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000833  00000000  00000000  00000bef  2**0
+  6 .debug_abbrev 0000088b  00000000  00000000  00000d18  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00000388  00000000  00000000  00001422  2**0
+  7 .debug_line   00000427  00000000  00000000  000015a3  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000084  00000000  00000000  000017ac  2**2
+  8 .debug_frame  000000cc  00000000  00000000  000019cc  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    0000046b  00000000  00000000  00001830  2**0
+  9 .debug_str    00000482  00000000  00000000  00001a98  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00000075  00000000  00000000  00001c9b  2**0
+ 10 .debug_loc    0000017b  00000000  00000000  00001f1a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000040  00000000  00000000  00001d10  2**0
+ 11 .debug_ranges 00000058  00000000  00000000  00002095  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -114,135 +114,181 @@ Disassembly of section .text:
   98:	11 e0       	ldi	r17, 0x01	; 1
   9a:	a0 e0       	ldi	r26, 0x00	; 0
   9c:	b1 e0       	ldi	r27, 0x01	; 1
-  9e:	e4 e3       	ldi	r30, 0x34	; 52
+  9e:	e2 ea       	ldi	r30, 0xA2	; 162
   a0:	f1 e0       	ldi	r31, 0x01	; 1
   a2:	00 e0       	ldi	r16, 0x00	; 0
   a4:	0b bf       	out	0x3b, r16	; 59
   a6:	02 c0       	rjmp	.+4      	; 0xac <__do_copy_data+0x14>
   a8:	07 90       	elpm	r0, Z+
   aa:	0d 92       	st	X+, r0
-  ac:	a4 30       	cpi	r26, 0x04	; 4
+  ac:	a6 30       	cpi	r26, 0x06	; 6
   ae:	b1 07       	cpc	r27, r17
   b0:	d9 f7       	brne	.-10     	; 0xa8 <__do_copy_data+0x10>
-  b2:	2b d0       	rcall	.+86     	; 0x10a <main>
-  b4:	3d c0       	rjmp	.+122    	; 0x130 <_exit>
+  b2:	3f d0       	rcall	.+126    	; 0x132 <main>
+  b4:	74 c0       	rjmp	.+232    	; 0x19e <_exit>
 
 000000b6 <__bad_interrupt>:
   b6:	a4 cf       	rjmp	.-184    	; 0x0 <__vectors>
 
-000000b8 <port_inti>:
+000000b8 <waitMs1>:
 	else
 	{
 		if (leds == 0x01)
 		irany = 0x01;
 		else
 		leds = leds >> 1;
-  b8:	80 ef       	ldi	r24, 0xF0	; 240
-  ba:	87 bb       	out	0x17, r24	; 23
-  bc:	81 bb       	out	0x11, r24	; 17
-  be:	10 92 64 00 	sts	0x0064, r1	; 0x800064 <__TEXT_REGION_LENGTH__+0x7e0064>
-  c2:	08 95       	ret
+  b8:	8f ec       	ldi	r24, 0xCF	; 207
+  ba:	97 e0       	ldi	r25, 0x07	; 7
+  bc:	01 97       	sbiw	r24, 0x01	; 1
+  be:	f1 f7       	brne	.-4      	; 0xbc <waitMs1+0x4>
+  c0:	00 c0       	rjmp	.+0      	; 0xc2 <waitMs1+0xa>
+  c2:	00 00       	nop
+  c4:	08 95       	ret
 
-000000c4 <ledOut>:
-  c4:	82 bb       	out	0x12, r24	; 18
-  c6:	82 95       	swap	r24
-  c8:	80 7f       	andi	r24, 0xF0	; 240
-  ca:	88 bb       	out	0x18, r24	; 24
-  cc:	08 95       	ret
+000000c6 <waitMs>:
+  c6:	cf 93       	push	r28
+  c8:	df 93       	push	r29
+  ca:	02 c0       	rjmp	.+4      	; 0xd0 <waitMs+0xa>
+  cc:	f5 df       	rcall	.-22     	; 0xb8 <waitMs1>
+  ce:	ce 01       	movw	r24, r28
+  d0:	ec 01       	movw	r28, r24
+  d2:	21 97       	sbiw	r28, 0x01	; 1
+  d4:	18 16       	cp	r1, r24
+  d6:	19 06       	cpc	r1, r25
+  d8:	cc f3       	brlt	.-14     	; 0xcc <waitMs+0x6>
+  da:	df 91       	pop	r29
+  dc:	cf 91       	pop	r28
+  de:	08 95       	ret
 
-000000ce <knight_rider>:
+000000e0 <port_inti>:
+  e0:	80 ef       	ldi	r24, 0xF0	; 240
+  e2:	87 bb       	out	0x17, r24	; 23
+  e4:	81 bb       	out	0x11, r24	; 17
+  e6:	10 92 64 00 	sts	0x0064, r1	; 0x800064 <__TEXT_REGION_LENGTH__+0x7e0064>
+  ea:	08 95       	ret
+
+000000ec <ledOut>:
+  ec:	82 bb       	out	0x12, r24	; 18
+  ee:	82 95       	swap	r24
+  f0:	80 7f       	andi	r24, 0xF0	; 240
+  f2:	88 bb       	out	0x18, r24	; 24
+  f4:	08 95       	ret
+
+000000f6 <knight_rider>:
 }
 
 void knight_rider()
 {
 	// balra fut
 	if (leds1 == 0x80)
-  ce:	80 91 01 01 	lds	r24, 0x0101	; 0x800101 <leds1>
-  d2:	80 38       	cpi	r24, 0x80	; 128
-  d4:	21 f4       	brne	.+8      	; 0xde <knight_rider+0x10>
+  f6:	80 91 03 01 	lds	r24, 0x0103	; 0x800103 <leds1>
+  fa:	80 38       	cpi	r24, 0x80	; 128
+  fc:	21 f4       	brne	.+8      	; 0x106 <knight_rider+0x10>
 	{
 		leds1 = 0x01;
-  d6:	81 e0       	ldi	r24, 0x01	; 1
-  d8:	80 93 01 01 	sts	0x0101, r24	; 0x800101 <leds1>
-  dc:	03 c0       	rjmp	.+6      	; 0xe4 <knight_rider+0x16>
+  fe:	81 e0       	ldi	r24, 0x01	; 1
+ 100:	80 93 03 01 	sts	0x0103, r24	; 0x800103 <leds1>
+ 104:	03 c0       	rjmp	.+6      	; 0x10c <knight_rider+0x16>
 	}
 	else
 	{
 		leds1 = leds1 << 1;
-  de:	88 0f       	add	r24, r24
-  e0:	80 93 01 01 	sts	0x0101, r24	; 0x800101 <leds1>
+ 106:	88 0f       	add	r24, r24
+ 108:	80 93 03 01 	sts	0x0103, r24	; 0x800103 <leds1>
 	}
 
 	// jobbra fut
 	if (leds2 == 0x01)
-  e4:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__data_start>
-  e8:	81 30       	cpi	r24, 0x01	; 1
-  ea:	21 f4       	brne	.+8      	; 0xf4 <knight_rider+0x26>
+ 10c:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <leds2>
+ 110:	81 30       	cpi	r24, 0x01	; 1
+ 112:	21 f4       	brne	.+8      	; 0x11c <knight_rider+0x26>
 	{
 		leds2 = 0x80;
-  ec:	80 e8       	ldi	r24, 0x80	; 128
-  ee:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__data_start>
-  f2:	03 c0       	rjmp	.+6      	; 0xfa <knight_rider+0x2c>
+ 114:	80 e8       	ldi	r24, 0x80	; 128
+ 116:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <leds2>
+ 11a:	03 c0       	rjmp	.+6      	; 0x122 <knight_rider+0x2c>
 	}
 	else
 	{
 		leds2 = leds2 >> 1;
-  f4:	86 95       	lsr	r24
-  f6:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__data_start>
+ 11c:	86 95       	lsr	r24
+ 11e:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <leds2>
 	}
 
 	leds = leds1 | leds2;
-  fa:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <leds1>
-  fe:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__data_start>
- 102:	89 2b       	or	r24, r25
- 104:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <leds>
- 108:	08 95       	ret
+ 122:	90 91 03 01 	lds	r25, 0x0103	; 0x800103 <leds1>
+ 126:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <leds2>
+ 12a:	89 2b       	or	r24, r25
+ 12c:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <leds>
+ 130:	08 95       	ret
 
-0000010a <main>:
+00000132 <main>:
+
+int d = 500; // base delay time number
 
 int main(void)
 {
-	// DDRB = 0xF0;
-	// PORTB = 0xF0;
 	port_inti();
- 10a:	d6 df       	rcall	.-84     	; 0xb8 <port_inti>
+ 132:	d6 df       	rcall	.-84     	; 0xe0 <port_inti>
 
 	while (1)
 	{
-		if(PING == 0x01)
- 10c:	80 91 63 00 	lds	r24, 0x0063	; 0x800063 <__TEXT_REGION_LENGTH__+0x7e0063>
- 110:	81 30       	cpi	r24, 0x01	; 1
- 112:	e1 f7       	brne	.-8      	; 0x10c <main+0x2>
+		if (PING == 0x02) // if the 2. button is pressed increase by 100
+ 134:	80 91 63 00 	lds	r24, 0x0063	; 0x800063 <__TEXT_REGION_LENGTH__+0x7e0063>
+ 138:	82 30       	cpi	r24, 0x02	; 2
+ 13a:	91 f4       	brne	.+36     	; 0x160 <main+0x2e>
 		{
-			ledOut(leds);
- 114:	80 91 02 01 	lds	r24, 0x0102	; 0x800102 <leds>
- 118:	d5 df       	rcall	.-86     	; 0xc4 <ledOut>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
+			d += 50;
+ 13c:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 140:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+ 144:	c2 96       	adiw	r24, 0x32	; 50
+ 146:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+ 14a:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+			if (d > 10000)
+ 14e:	81 31       	cpi	r24, 0x11	; 17
+ 150:	97 42       	sbci	r25, 0x27	; 39
+ 152:	34 f0       	brlt	.+12     	; 0x160 <main+0x2e>
+				d = 10000;
+ 154:	80 e1       	ldi	r24, 0x10	; 16
+ 156:	97 e2       	ldi	r25, 0x27	; 39
+ 158:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+ 15c:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+		}
+		if (PING == 0x01) // if the 1. button is pressed decrease by 100
+ 160:	80 91 63 00 	lds	r24, 0x0063	; 0x800063 <__TEXT_REGION_LENGTH__+0x7e0063>
+ 164:	81 30       	cpi	r24, 0x01	; 1
+ 166:	89 f4       	brne	.+34     	; 0x18a <main+0x58>
+		{
+			d -= 50;
+ 168:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 16c:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+ 170:	c2 97       	sbiw	r24, 0x32	; 50
+ 172:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+ 176:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+			if (d < 50)
+ 17a:	c2 97       	sbiw	r24, 0x32	; 50
+ 17c:	34 f4       	brge	.+12     	; 0x18a <main+0x58>
+				d = 50;
+ 17e:	82 e3       	ldi	r24, 0x32	; 50
+ 180:	90 e0       	ldi	r25, 0x00	; 0
+ 182:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+ 186:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+		}
+		ledOut(leds);
+ 18a:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <leds>
+ 18e:	ae df       	rcall	.-164    	; 0xec <ledOut>
 
-	__builtin_avr_delay_cycles(__ticks_dc);
- 11a:	2f ef       	ldi	r18, 0xFF	; 255
- 11c:	84 e3       	ldi	r24, 0x34	; 52
- 11e:	9c e0       	ldi	r25, 0x0C	; 12
- 120:	21 50       	subi	r18, 0x01	; 1
- 122:	80 40       	sbci	r24, 0x00	; 0
- 124:	90 40       	sbci	r25, 0x00	; 0
- 126:	e1 f7       	brne	.-8      	; 0x120 <main+0x16>
- 128:	00 c0       	rjmp	.+0      	; 0x12a <main+0x20>
-			// leds = leds<<1;
-			// leds = leds^0x33; //XOR
-			// PORTB = 0x00;
-			//_delay_ms(500);
+		waitMs(d);
+ 190:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 194:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+		knight_rider();
+ 198:	96 df       	rcall	.-212    	; 0xc6 <waitMs>
+ 19a:	ad df       	rcall	.-166    	; 0xf6 <knight_rider>
+	}
+ 19c:	cb cf       	rjmp	.-106    	; 0x134 <main+0x2>
 
-			knight_rider();
- 12a:	00 00       	nop
- 12c:	d0 df       	rcall	.-96     	; 0xce <knight_rider>
- 12e:	ee cf       	rjmp	.-36     	; 0x10c <main+0x2>
+0000019e <_exit>:
+ 19e:	f8 94       	cli
 
-00000130 <_exit>:
- 130:	f8 94       	cli
-
-00000132 <__stop_program>:
- 132:	ff cf       	rjmp	.-2      	; 0x132 <__stop_program>
+000001a0 <__stop_program>:
+ 1a0:	ff cf       	rjmp	.-2      	; 0x1a0 <__stop_program>
