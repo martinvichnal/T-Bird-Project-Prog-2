@@ -15,6 +15,8 @@ void jobbra_fut();
 void balra_jobbra_fut();
 void knight_rider();
 
+void rgbLed();
+
 uint8_t leds = 0x01;
 uint8_t leds1 = 0x01;
 uint8_t leds2 = 0x80;
@@ -25,7 +27,8 @@ int d = 500; // base delay time number
 int main(void)
 {
 	port_inti();
-
+	rgbLed();
+	
 	while (1)
 	{
 		if (PING == 0x02) // if the 2. button is pressed increase by 100
@@ -45,6 +48,14 @@ int main(void)
 		waitMs(d);
 		knight_rider();
 	}
+}
+void rgbLed()
+{
+	DDRC|=0x08;
+	DDRE|=0x0C;
+	
+	PORTC=0x88;
+	PORTE=0x0C;
 }
 
 void port_inti()
