@@ -1,7 +1,7 @@
 # T-Bird-Project
  Ez a projekt a Programozás 2 a Gyakorlatban miatt jött létre.
 Ebben a projektben a fő cél a Bas (elterjedt további nevei: Mia, Maja, stb.) dobókockás játék rekonstrukciója.
-### Szabályok - Referencialink [Wikipedia Page](https://en.wikipedia.org/wiki/Mia_(game))
+### Szabályok - [Wikipedia](https://en.wikipedia.org/wiki/Mia_(game))
 Az első dob a két kockával úgy, hogy a dobott értéket csak ő lássa. Ezek után közölni kell a dobás eredményét a következő szabályok figyelembe vételével:
 - A dobott értéket kétjegyű számként olvassuk fel, ahol a nagyobb szám van a tízesek helyén, a kisebb pedig az egyesekén. Vagyis ha egy négyest és egy ötöst dobtunk, akkor az 54 és nem 45 lesz.
 - Ha egyformát dobunk, akkor **bas**unk van (azaz 22 = 2-es bas vagy 66 = 6-os bas), ami viszont többet ér az előző pontban említett dobásoknál.
@@ -60,6 +60,7 @@ Chip|Pinout|Datasheet
 # References, Useful links
 * [AVR fuse calculator](http://www.engbedded.com/fusecalc)
 * [AVR timer calculator](http://eleccelerator.com/avr-timer-calculator/)
+* [T-bird](https://t-bird.webnode.hu/)
 
 -----------------------------------------------------
 # Usefull code parts
