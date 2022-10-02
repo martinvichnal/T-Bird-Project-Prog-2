@@ -30,3 +30,22 @@ void waitMs1(){_delay_ms(1);}
 void waitMs(int ms){while (ms-->0){waitMs1();}}
 void waitSec(int sec){while (sec-->0){waitMs(1000);}}
 ```
+
+
+### RGB Led
+```C
+// RED -> C7 (0x80)
+PORTC = 0x88;
+_delay_ms(1000);
+PORTC = 0x00;
+	
+// GREEN -> E2 (0x04)
+PORTE = 0x04;
+_delay_ms(1000);
+PORTE = 0x00;
+	
+// BLUE -> E3 (0x08)
+PORTE = 0x08;
+_delay_ms(1000);
+PORTE = 0x00;
+```
