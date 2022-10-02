@@ -49,3 +49,13 @@ PORTE = 0x08;
 _delay_ms(1000);
 PORTE = 0x00;
 ```
+
+### Bitműveletek
+```C
+x = y << 1	// Balra shiftelés
+x = y >> 1	// Jobbra shiftelés
+x ~= y		// Bitenkénti NOT
+x &= y		// Bitenkénti AND
+x |= y		// Bitenkénti OR
+x ^= y		// Bitenkénti XOR
+```
