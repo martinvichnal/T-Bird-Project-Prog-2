@@ -4,16 +4,12 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-void waitMs1(){_delay_ms(1);}
-void waitMs(int ms){while (ms-->0){waitMs1();}}
-void waitSec(int sec){while (sec-->0){waitMs(1000);}}
+//void waitMs1(){_delay_ms(1);}
+//void waitMs(int ms){while (ms-->0){waitMs1();}}
+//void waitSec(int sec){while (sec-->0){waitMs(1000);}}
 
 void port_inti();
 void ledOut(uint8_t leds);
-void balra_fut();
-void jobbra_fut();
-void balra_jobbra_fut();
-void knight_rider();
 
 void rgbLed();
 
@@ -27,113 +23,48 @@ int d = 500; // base delay time number
 int main(void)
 {
 	port_inti();
-	rgbLed();
 	
 	while (1)
 	{
-		if (PING == 0x02) // if the 2. button is pressed increase by 100
-		{
-			d += 50;
-			if (d > 10000) // delay protection
-				d = 10000;
-		}
-		if (PING == 0x01) // if the 1. button is pressed decrease by 100
-		{
-			d -= 50;
-			if (d < 50) // delay protection
-				d = 50;
-		}
-		ledOut(leds);
-
-		waitMs(d);
-		knight_rider();
+		//ledOut(leds);
+		rgbLed();
 	}
 }
 void rgbLed()
 {
-	DDRC|=0x08;
-	DDRE|=0x0C;
+	// RED -> C7 (0x80), GREEN -> E2 (0x04), BLUE -> E3 (0x08)
 	
-	PORTC=0x88;
-	PORTE=0x0C;
+	// RED
+	PORTC = 0x88;
+	_delay_ms(1000);
+	PORTC = 0x00;
+	
+	// GREEN
+	PORTE = 0x04;
+	_delay_ms(1000);
+	PORTE = 0x00;
+	
+	// BLUE
+	PORTE = 0x08;
+	_delay_ms(1000);
+	PORTE = 0x00;
+
 }
 
 void port_inti()
 {
-	DDRB = 0xF0;
-	DDRD = 0xF0;
-	DDRG = 0x00;
+	// Ha bit 1 akkor kimenet, ha bit 0 akkor bemenet
+	
+	DDRB = 0xF0;	// Led 0-3 -> 11110000
+	DDRD = 0xF0;	// Led 4-7 - 11110000
+	DDRG = 0x00;	// Pushbuttons K0-K4
+	
+	DDRC = 0x88;		// Keyboard, -> 10001000 || Red, KBD1row?
+	DDRE = 0x0C;		// RGB led -> 00001100 || Green, Blue
 }
 
 void ledOut(uint8_t led)
 {
 	PORTD = led;
 	PORTB = led << 4; // Shiftelni kell balra 4-el
-}
-
-void balra_fut()
-{
-	if (leds == 0x80)
-	{
-		leds = 0x01;
-	}
-	else
-	{
-		leds = leds << 1;
-	}
-}
-
-void jobbra_fut()
-{
-	if (leds == 0x01)
-	{
-		leds = 0x80;
-	}
-	else
-	{
-		leds = leds >> 1;
-	}
-}
-
-void balra_jobbra_fut()
-{
-	if (irany)
-	{
-		if (leds == 0x80)
-		irany = 0x00;
-		else
-		leds = leds << 1;
-	}
-	else
-	{
-		if (leds == 0x01)
-		irany = 0x01;
-		else
-		leds = leds >> 1;
-	}
-}
-
-void knight_rider()
-{
-	// balra fut
-	if (leds1 == 0x80)
-	{
-		leds1 = 0x01;
-	}
-	else
-	{
-		leds1 = leds1 << 1;
-	}
-
-	// jobbra fut
-	if (leds2 == 0x01)
-	{
-		leds2 = 0x80;
-	}
-	else
-	{
-		leds2 = leds2 >> 1;
-	}
-
-	leds = leds1 | leds2;
 }
