@@ -3,50 +3,68 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
-//void waitMs1(){_delay_ms(1);}
-//void waitMs(int ms){while (ms-->0){waitMs1();}}
-//void waitSec(int sec){while (sec-->0){waitMs(1000);}}
 
 void port_inti();
 void ledOut(uint8_t leds);
+void timer_init();
+void rgbLed(double d);
 
-void rgbLed();
+void waitMs1(){_delay_ms(1);}
+void waitMs(int ms){while (ms-->0){waitMs1();}}
+void waitSec(int sec){while (sec-->0){waitMs(1000);}}
 
 uint8_t leds = 0x01;
-uint8_t leds1 = 0x01;
-uint8_t leds2 = 0x80;
-uint8_t irany = 0x01;
+uint8_t ido;
 
-int d = 500; // base delay time number
+double d = 1000;
 
 int main(void)
 {
 	port_inti();
+	timer_init();
+
+	DDRA = 0xFF;
+	PORTA = 0b10000001;
 	
 	while (1)
 	{
-		//ledOut(leds);
-		rgbLed();
+		if (PING == 0x02) // if the 2. button is pressed increase by 100
+		{
+			d += 200;
+			if (d > 10000) // delay protection
+			d = 10000;
+		}
+		if (PING == 0x01) // if the 1. button is pressed decrease by 100
+		{
+			d -= 200;
+			if (d < 50) // delay protection
+			d = 50;
+		}
+		rgbLed(d);
 	}
 }
-void rgbLed()
+void rgbLed(double d)
 {
 	// RED -> C7 (0x80), GREEN -> E2 (0x04), BLUE -> E3 (0x08)
 	
 	// RED
 	PORTC = 0x88;
-	_delay_ms(1000);
+	//_delay_ms(1000);
+	waitMs(d);
 	PORTC = 0x00;
 	
 	// GREEN
 	PORTE = 0x04;
-	_delay_ms(1000);
+	//_delay_ms(1000);
+	waitMs(d);
 	PORTE = 0x00;
 	
 	// BLUE
 	PORTE = 0x08;
-	_delay_ms(1000);
+	//_delay_ms(1000);
+	waitMs(d);
 	PORTE = 0x00;
 
 }
@@ -65,6 +83,23 @@ void port_inti()
 
 void ledOut(uint8_t led)
 {
-	PORTD = led;
-	PORTB = led << 4; // Shiftelni kell balra 4-el
+	PORTD = (led & 0xF0);
+	PORTB = ((led << 4) & 0xF0);
+}
+
+
+void timer_init()
+{
+	TCCR0 = 1 << CS02 | 0 << CS01 | 0 << CS00;
+	TIMSK = 1 << TOIE0;
+	sei();
+}
+
+ISR(TIMER0_OVF_vect)
+{
+	if (!ido--)
+	{
+		ledOut(leds);
+		leds = leds ^ 0x01;
+	}
 }
