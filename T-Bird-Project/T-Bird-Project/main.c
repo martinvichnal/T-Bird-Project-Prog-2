@@ -10,8 +10,8 @@ void init();
 void sevenSegment_PutDigit(uint8_t digit, uint8_t num);
 void sevenSegment_PutNumber(int num);
 void rgb_Show(uint8_t r, uint8_t g, uint8_t b);
+void rgb_Rainbow();
 void led_Out(uint8_t leds);
-
 
 void waitMs1(){_delay_ms(1);}
 void waitMs(int ms){while (ms-->0){waitMs1();}}
@@ -21,38 +21,47 @@ uint8_t leds = 0x01;
 uint8_t ido;
 uint8_t digit[4] = {0};		int j = 0;
 
-double d = 1000;
-
 int timerNum = 0;
 
 uint8_t brightness = 1;
 uint8_t pwm_red = 0;			uint8_t h_red = 0;
 uint8_t pwm_green = 0;			uint8_t h_green = 0;
 uint8_t pwm_blue = 0;			uint8_t h_blue = 0;
-uint8_t szam = 0;
-
 
 
 int main(void)
 {
 	init();
 	
-	sevenSegment_PutNumber(24);
+	uint8_t r = 100;
+	uint8_t g = 0;
+	uint8_t b = 0;
 	
-	rgb_Show(1, 1, 100);
 	
-
 	while (1)
 	{
-		//OCR0 = duty_cycle;
-		//_delay_ms(15);
-		//duty_cycle += 1;
-		//if (duty_cycle >= 250)
-		//{
-		//duty_cycle = 0;
-		//OCR0 = duty_cycle;
-		//_delay_ms(1000);
-		//}
+
+		while (g < 100)
+		{
+			g++;
+			r--;
+			rgb_Show(r, g, b);
+			_delay_ms(50);
+		}
+		while (b < 100)
+		{
+			b++;
+			g--;
+			rgb_Show(r, g, b);
+			_delay_ms(50);
+		}
+		while (r < 100)
+		{
+			r++;
+			b--;
+			rgb_Show(r, g, b);
+			_delay_ms(50);
+		}
 	}
 }
 
@@ -62,78 +71,39 @@ ISR(TIMER0_OVF_vect)
 	h_green++;
 	h_blue++;
 	
+	// Switching the RED led with PWM
 	if (h_red > pwm_red)
 	{
-		PORTC = 0x80;
+		PORTC &=~ (1<<PC7);
 		if (h_red > 100)
 		h_red = 0;
 	}
-	else
-	{
-		PORTC = 0x00;
-	}
-	
-	
+	else { PORTC |= (1<<PC7); }
+
+	// Switching the GREEN led with PWM
 	if (h_green > pwm_green)
 	{
-		PORTE = 1 & 0x04;
+		PORTE &=~ (1<<PE2);
 		if (h_green > 100)
 		h_green = 0;
 	}
-	else
-	{
-		PORTE = 0 & 0x04;
-	}
+	else { PORTE |= (1<<PE2); }
 	
-	
+	// Switching the BLUE led with PWM
 	if (h_blue > pwm_blue)
 	{
-		PORTE = 1 & 0x08;
+		PORTE &=~ (1<<PE3);
 		if (h_blue > 100)
 		h_blue = 0;
 	}
-	else
-	{
-		PORTE = 0 & 0x08;
-	}
+	else { PORTE |= (1<<PE3); }
+	
 	
 	sevenSegment_PutNumber(timerNum);
 	
-	// Controlling the PWM
-	//szam++;
-	//if (szam > brightness)
-	//{
-	//led_Out(0x00);
-	//if (szam > 100)
-	//szam = 0;
-	//}
-	//else
-	//{
-	//led_Out(0xFF);
-	//}
-	//
 
-	
-	//led_Out(0xFF);
 	if (!ido--)
 	{
-		// villogtatas
-		//led_Out(leds);
-		//leds = leds ^ 0x01;
-
-		// pwm test
-		//brightness++;
-		//if (brightness > 255)
-		//{
-		//brightness = 1;
-		//}
-		
-		pwm_green++;
-		if (pwm_green > 100)
-		{
-			pwm_green = 1;
-		}
-		
 		// 7segmens szamlalo
 		timerNum++;
 		if (timerNum == 9999)
@@ -164,9 +134,6 @@ void init()
 	//TCCR0 = 1 << CS01 | 1 << CS00;
 	TIMSK = 1 << TOIE0;
 	sei();
-	
-	// PWM
-	//TCCR0 = 1 << CS02 | 0 << CS01 | 0 << CS00 | 1 << WGM00;
 	
 }
 
@@ -206,4 +173,33 @@ void rgb_Show(uint8_t r, uint8_t g, uint8_t b)
 	pwm_red = r;
 	pwm_green = g;
 	pwm_blue = b;
+}
+
+void rgb_Rainbow()
+{
+	uint8_t r = 100;
+	uint8_t g = 0;
+	uint8_t b = 0;
+	
+	while (g < 100)
+	{
+		g++;
+		r--;
+		rgb_Show(r, g, b);
+		_delay_ms(50);
+	}
+	while (b < 100)
+	{
+		b++;
+		g--;
+		rgb_Show(r, g, b);
+		_delay_ms(50);
+	}
+	while (r < 100)
+	{
+		r++;
+		b--;
+		rgb_Show(r, g, b);
+		_delay_ms(50);
+	}
 }
