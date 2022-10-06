@@ -7,10 +7,13 @@
 
 
 void init();
+
 void sevenSegment_PutDigit(uint8_t digit, uint8_t num);
 void sevenSegment_PutNumber(int num);
-void rgb_Show(uint8_t r, uint8_t g, uint8_t b);
+
+void rgb_Show(float r, float g, float b, uint8_t brightness);
 void rgb_Rainbow();
+
 void led_Out(uint8_t leds);
 
 void waitMs1(){_delay_ms(1);}
@@ -23,10 +26,11 @@ uint8_t digit[4] = {0};		int j = 0;
 
 int timerNum = 0;
 
-uint8_t brightness = 1;
-uint8_t pwm_red = 0;			uint8_t h_red = 0;
-uint8_t pwm_green = 0;			uint8_t h_green = 0;
-uint8_t pwm_blue = 0;			uint8_t h_blue = 0;
+uint8_t brightness = 50;
+float pwm_red = 0;				float h_red = 0;
+float pwm_green = 0;			float h_green = 0;
+float pwm_blue = 0;				float h_blue = 0;
+
 
 
 int main(void)
@@ -37,31 +41,40 @@ int main(void)
 	uint8_t g = 0;
 	uint8_t b = 0;
 	
+	rgb_Show(r, g, b, brightness);
 	
 	while (1)
 	{
 
-		while (g < 100)
+		brightness--;
+		if (brightness <= 0)
 		{
-			g++;
-			r--;
-			rgb_Show(r, g, b);
-			_delay_ms(10);
+			brightness = 100;
 		}
-		while (b < 100)
-		{
-			b++;
-			g--;
-			rgb_Show(r, g, b);
-			_delay_ms(10);
-		}
-		while (r < 100)
-		{
-			r++;
-			b--;
-			rgb_Show(r, g, b);
-			_delay_ms(10);
-		}
+		rgb_Show(r, g, b, brightness);
+		_delay_ms(10);
+
+		//while (g < 100)
+		//{
+		//g++;
+		//r--;
+		//rgb_Show(r, g, b);
+		//_delay_ms(10);
+		//}
+		//while (b < 100)
+		//{
+		//b++;
+		//g--;
+		//rgb_Show(r, g, b);
+		//_delay_ms(10);
+		//}
+		//while (r < 100)
+		//{
+		//r++;
+		//b--;
+		//rgb_Show(r, g, b);
+		//_delay_ms(10);
+		//}
 	}
 }
 
@@ -166,13 +179,18 @@ void led_Out(uint8_t led)
 	PORTB = ((led << 4) & 0xF0);
 }
 
-void rgb_Show(uint8_t r, uint8_t g, uint8_t b)
+void rgb_Show(float r, float g, float b, uint8_t brightness)
 {
 	// RED -> C7 (0x80), GREEN -> E2 (0x04), BLUE -> E3 (0x08)
-	
-	pwm_red = r;
-	pwm_green = g;
-	pwm_blue = b;
+	float x = 100 / brightness;
+
+	if(brightness != 0)
+	{
+		x = (100 / (float)brightness);
+		pwm_red = r / x;
+		pwm_green = g / x;
+		pwm_blue = b / x;
+	}
 }
 
 void rgb_Rainbow()
@@ -185,21 +203,21 @@ void rgb_Rainbow()
 	{
 		g++;
 		r--;
-		rgb_Show(r, g, b);
+		rgb_Show(r, g, b, brightness);
 		_delay_ms(50);
 	}
 	while (b < 100)
 	{
 		b++;
 		g--;
-		rgb_Show(r, g, b);
+		rgb_Show(r, g, b, brightness);
 		_delay_ms(50);
 	}
 	while (r < 100)
 	{
 		r++;
 		b--;
-		rgb_Show(r, g, b);
+		rgb_Show(r, g, b, brightness);
 		_delay_ms(50);
 	}
 }
