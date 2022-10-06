@@ -46,21 +46,21 @@ int main(void)
 			g++;
 			r--;
 			rgb_Show(r, g, b);
-			_delay_ms(50);
+			_delay_ms(10);
 		}
 		while (b < 100)
 		{
 			b++;
 			g--;
 			rgb_Show(r, g, b);
-			_delay_ms(50);
+			_delay_ms(10);
 		}
 		while (r < 100)
 		{
 			r++;
 			b--;
 			rgb_Show(r, g, b);
-			_delay_ms(50);
+			_delay_ms(10);
 		}
 	}
 }
