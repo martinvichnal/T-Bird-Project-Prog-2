@@ -70,12 +70,6 @@ Chip|Pinout|Datasheet
 #define F_CPU 8000000L
 ```
 
-### CPU Speed
-```C
-#include <avr/io.h>
-#include <util/delay.h>
-```
-
 ### Reading pins
 ```C
 if(PIND&(1<<PD7)){doSomething();} // runs doSomething() if PD7 is HIGH
