@@ -12,9 +12,9 @@ if(PIND&(1<<PD7)){doSomething();} // runs doSomething() if PD7 is HIGH
 
 ### Bit flipping in C
 ```c
-PORTD|=(1<<PD6); // sets PD6 high
-PORTD&=~(1<<PD6); // sets PD6 low
-PORTD^=(1<<PD6); // flips the state of PD6
+PORTD |= (1 << PD6); // sets PD6 high
+PORTD &=~ (1 << PD6); // sets PD6 low
+PORTD ^= (1 << PD6); // flips the state of PD6
 ```
 
 ### Memory-Efficient Timers
