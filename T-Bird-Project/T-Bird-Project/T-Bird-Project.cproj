@@ -150,7 +150,19 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="delay.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="led.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="rgb.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sevenSegment.c">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

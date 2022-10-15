@@ -65,14 +65,9 @@ void waitSec(int sec){while (sec-->0){waitMs(1000);}}
 int main(void)
 {
 	init();
-	
-
-	
-	//rgb_Show(r, g, b, brightness);
 
 	while (1)
 	{
-<<<<<<< Updated upstream
 		while (g < 255)
 		{
 			g++;
@@ -93,37 +88,6 @@ int main(void)
 			b--;
 			rgb_Show(r, g, b, brightness);
 			//_delay_ms(1);
-=======
-		//
-		//brightness--;
-		//if (brightness <= 0)
-		//{
-			//brightness = 100;
-		//}
-		//rgb_Show(r, g, b, brightness);
-		//_delay_ms(10);
-
-		while (g < 100)
-		{
-			g++;
-			r--;
-			rgb_Show(r, g, b,100);
-			//_delay_ms(10);
-		}
-		while (b < 100)
-		{
-			b++;
-			g--;
-			rgb_Show(r, g, b,100);
-			//_delay_ms(10);
-		}
-		while (r < 100)
-		{
-			r++;
-			b--;
-			rgb_Show(r, g, b,100);
-			//_delay_ms(10);
->>>>>>> Stashed changes
 		}
 	}
 }
