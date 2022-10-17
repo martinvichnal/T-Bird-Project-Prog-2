@@ -1,9 +1,9 @@
-// Milyen frekvencián menjen
 #define F_CPU 8000000L
 
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+
 
 // Ports/Timer/Interrupts initialization
 void init();
@@ -30,7 +30,7 @@ float pwm_red = 0;				float h_red = 0;
 float pwm_green = 0;			float h_green = 0;
 float pwm_blue = 0;				float h_blue = 0;
 
-uint8_t rgb_enable = 1;
+uint8_t rgb_enable = 0;
 
 void rgb_Show(float r, float g, float b, uint8_t brightness);
 void rgb_Rainbow();
@@ -59,35 +59,23 @@ void waitSec(int sec){while (sec-->0){waitMs(1000);}}
 // ----------------------------------------------
 
 
+// 0   1   2   3   4   5   6   7   8   9   *   # billentyuk
+uint8_t matrix(void);
+const unsigned char bill[12]={69, 14, 13, 11, 22, 21, 19, 38, 37, 35, 70, 67};
 
 
 
 int main(void)
 {
 	init();
+	
 
 	while (1)
 	{
-		while (g < 255)
+		b = matrix();
+		if (b <= 9)
 		{
-			g++;
-			r--;
-			rgb_Show(r, g, b, brightness);
-			//_delay_ms(1);
-		}
-		while (b < 255)
-		{
-			b++;
-			g--;
-			rgb_Show(r, g, b, brightness);
-			//_delay_ms(1);
-		}
-		while (r < 255)
-		{
-			r++;
-			b--;
-			rgb_Show(r, g, b, brightness);
-			//_delay_ms(1);
+			PORTA = 0x80 | b;
 		}
 	}
 }
@@ -129,7 +117,7 @@ ISR(TIMER0_OVF_vect)
 		else { PORTE |= (1<<PE3); }
 	}
 	
-	sevenSegment_PutNumber(timerNum);
+	//sevenSegment_PutNumber(timerNum);
 	
 
 	if (!ido--)
@@ -156,16 +144,23 @@ void init()
 {
 	// Ha bit 1 akkor kimenet, ha bit 0 akkor bemenet
 	
-	DDRB = 0xF0;	// Led 0-3 -> 11110000
-	DDRD = 0xF0;	// Led 4-7 - 11110000
+	DDRB &= 0x0F;	// Mask 0b00001111
+	DDRB |= 0xF0;	// Led 0-3 -> 11110000
+	DDRD &= 0x0F;	// Mask 0b00001111
+	DDRD |= 0xF0;	// Led 4-7 - 11110000
 
 	DDRG = 0x00;	// Pushbuttons K0-K4
 	
-	DDRC = 0x88;	// Keyboard, -> 10001000 || Red, KBD1row?
+	//DDRC = 0x88;	// Keyboard, -> 10001000 || Red, KBD1row?
 
 	DDRE = 0x0C;	// RGB led -> 00001100 || Green, Blue
 	
 	DDRA = 0xFF;	// 7 Segment display
+	
+	// Matrix billentyuzet
+	DDRC &= 0x80;	// Maszk beallitasa hogy az elozot ne irjuk felul
+	DDRC |= 0x78;	// 78 ha csak a matrixot hasznaljuk
+	
 	
 	
 	// Timer init:
@@ -195,7 +190,6 @@ void sevenSegment_PutNumber(int num)
 	
 	j = (j + 1) % 4;			// Hany Digites
 	sevenSegment_PutDigit(j, digit[j]);
-	
 }
 
 
@@ -244,4 +238,32 @@ void rgb_Rainbow()
 		rgb_Show(r, g, b, brightness);
 		_delay_ms(50);
 	}
+}
+
+uint8_t matrix()
+{
+	uint8_t sor = 0x08;		// elso sor
+	uint8_t beolvas = 0;
+	uint8_t i = 0;
+	
+	while (sor <= 0x40)
+	{
+		PORTC &= 0x80;
+		PORTC |= sor;			// megcimezzuk a sort
+		_delay_ms(5);
+		
+		beolvas = PINC & 0x7F;	// ne modositsa az RGB piros allpota.
+		
+		while(i < 12)
+		{
+			if (bill[i] == beolvas)
+			{
+				return i;
+			}
+			i++;
+		}
+		i = 0;
+		sor<<=1;
+	}
+	return 12;
 }
