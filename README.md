@@ -58,6 +58,7 @@ Chip|Pinout|Datasheet
 -----------------------------------------------------
 
 # References, Useful links
+* [AVR libs](https://www.nongnu.org/avr-libc/user-manual/modules.html)
 * [AVR fuse calculator](http://www.engbedded.com/fusecalc)
 * [AVR timer calculator](http://eleccelerator.com/avr-timer-calculator/)
 * [T-bird](https://t-bird.webnode.hu/)
