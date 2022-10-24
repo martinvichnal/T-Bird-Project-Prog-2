@@ -18,12 +18,12 @@ float pwm_red = 0;				float h_red = 0;
 float pwm_green = 0;			float h_green = 0;
 float pwm_blue = 0;				float h_blue = 0;
 
-uint8_t rgb_enable = 1;			// enable bit for PWM.		1 - enabled
+// enable bit for PWM.		1 - enabled
+uint8_t rgb_enable = 1;
 
 
 void rgb_Show(float r, float g, float b, uint8_t brightness)
 {
-	// RED -> C7 (0x80), GREEN -> E2 (0x04), BLUE -> E3 (0x08)
 	float x = 100 / brightness;
 
 	if(brightness != 0)
@@ -34,30 +34,7 @@ void rgb_Show(float r, float g, float b, uint8_t brightness)
 		pwm_blue = b / x;
 	}
 }
-void rgb_Rainbow()
-{
-	while (g < 100)
-	{
-		g++;
-		r--;
-		rgb_Show(r, g, b, brightness);
-		_delay_ms(50);
-	}
-	while (b < 100)
-	{
-		b++;
-		g--;
-		rgb_Show(r, g, b, brightness);
-		_delay_ms(50);
-	}
-	while (r < 100)
-	{
-		r++;
-		b--;
-		rgb_Show(r, g, b, brightness);
-		_delay_ms(50);
-	}
-}
+
 
 void rgb_pwm_handling()
 {
@@ -97,3 +74,27 @@ void rgb_pwm_handling()
 }
 
 
+void rgb_Rainbow()
+{
+	while (g < 100)
+	{
+		g++;
+		r--;
+		rgb_Show(r, g, b, brightness);
+		_delay_ms(50);
+	}
+	while (b < 100)
+	{
+		b++;
+		g--;
+		rgb_Show(r, g, b, brightness);
+		_delay_ms(50);
+	}
+	while (r < 100)
+	{
+		r++;
+		b--;
+		rgb_Show(r, g, b, brightness);
+		_delay_ms(50);
+	}
+}
