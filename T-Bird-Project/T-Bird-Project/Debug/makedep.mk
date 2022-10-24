@@ -8,6 +8,8 @@ led.c
 
 main.c
 
+matrix.c
+
 rgb.c
 
 sevenSegment.c
