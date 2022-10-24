@@ -23,9 +23,10 @@ int main(void)
 {
 	init();
 	
-
 	while (1)
 	{
+		//rgb_Show(0, 0, 100, 100);
+		//rgb_Rainbow();
 		b = matrix();
 		if (b <= 9)
 		{
@@ -37,41 +38,9 @@ int main(void)
 
 ISR(TIMER0_OVF_vect)
 {
-	//if (rgb_enable)
-	//{
-		//h_red++;
-		//h_green++;
-		//h_blue++;
-		//
-		//// Switching the RED led with PWM
-		//if (h_red > pwm_red)
-		//{
-			//PORTC &=~ (1<<PC7);
-			//if (h_red > 100)
-			//h_red = 0;
-		//}
-		//else { PORTC |= (1<<PC7); }
-//
-		//// Switching the GREEN led with PWM
-		//if (h_green > pwm_green)
-		//{
-			//PORTE &=~ (1<<PE2);
-			//if (h_green > 100)
-			//h_green = 0;
-		//}
-		//else { PORTE |= (1<<PE2); }
-		//
-		//// Switching the BLUE led with PWM
-		//if (h_blue > pwm_blue)
-		//{
-			//PORTE &=~ (1<<PE3);
-			//if (h_blue > 100)
-			//h_blue = 0;
-		//}
-		//else { PORTE |= (1<<PE3); }
-	//}
+	rgb_pwm_handling();
 	
-	sevenSegment_PutNumber(timerNum);
+	//sevenSegment_PutNumber(timerNum);
 	
 
 	if (!ido--)
@@ -88,25 +57,28 @@ ISR(TIMER0_OVF_vect)
 
 void init()
 {
-	// Ha bit 1 akkor kimenet, ha bit 0 akkor bemenet
-	
-	DDRB &= 0x0F;	// Mask 0b00001111
-	DDRB |= 0xF0;	// Led 0-3 -> 11110000
-	DDRD &= 0x0F;	// Mask 0b00001111
-	DDRD |= 0xF0;	// Led 4-7 - 11110000
+	// 1 - output
+	// 0 - input
 
-	DDRG = 0x00;	// Pushbuttons K0-K4
-	
-	//DDRC = 0x88;	// Keyboard, -> 10001000 || Red, KBD1row?
+	DDRB &= 0x0F;	// led mask	-> 00001111 (0 - 3)
+	DDRB |= 0xF0;	// led		-> 11110000 (0 - 3)
+	DDRD &= 0x0F;	// led mask	-> 00001111 (0 - 3)
+	DDRD |= 0xF0;	// led		-> 11110000 (4 - 7)
 
-	DDRE = 0x0C;	// RGB led -> 00001100 || Green, Blue
+	//DDRG = 0x00;	// Pushbuttons K0-K4
+	DDRG &= 0xE0;	// Pushbuttons mask	-> 11100000	(K0 - K4)
+	DDRG |= 0x00;	// Pushbuttons		-> 00000000 (K0 - K4)
+	
+	DDRE &= 0xF3;	// RGB mask	-> 11110011 (Blue & Green)
+	DDRE |= 0x0C;	// RGB led	-> 00001100 (Blue & Green)
+	DDRC &= 0x7F;	// RGB mask	-> 01111111 (Red)
+	DDRC |= 80;		// RGB led	-> 10000000 (Red)
 	
 	DDRA = 0xFF;	// 7 Segment display
 	
-	// Matrix billentyuzet
-	DDRC &= 0x80;	// Maszk beallitasa hogy az elozot ne irjuk felul
-	DDRC |= 0x78;	// 78 ha csak a matrixot hasznaljuk
-	
+	// Matrix keyboard
+	DDRC &= 0x80;	// Matrix mask	->	10000000
+	DDRC |= 0x78;	// Matrix		->	01111000
 	
 	
 	// Timer init:

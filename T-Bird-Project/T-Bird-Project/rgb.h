@@ -14,23 +14,11 @@
 #ifndef RGB_H_
 #define RGB_H_
 
-//#define brightness	255
-//#define r			255
-//#define g			0
-//#define b			0
-//#define pwm_red		0
-//#define pwm_green	0
-//#define pwm_blue	0
-//#define h_red		0
-//#define h_green		0
-//#define h_blue		0
-//
-//#define rgb_enable	0;
-
 void rgb_Show(float r, float g, float b, uint8_t brightness);
 
 void rgb_Rainbow();
 
+void rgb_pwm_handling();
 
 
 #endif /* RGB_H_ */
