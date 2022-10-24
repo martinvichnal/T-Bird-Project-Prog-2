@@ -12,11 +12,13 @@ uint8_t brightness = 255;
 uint8_t r = 255;
 uint8_t g = 0;
 uint8_t b = 0;
+
 // PWM values for RGB			// Counter values of PWM
 float pwm_red = 0;				float h_red = 0;
 float pwm_green = 0;			float h_green = 0;
 float pwm_blue = 0;				float h_blue = 0;
-uint8_t rgb_enable = 1;
+
+uint8_t rgb_enable = 1;			// enable bit for PWM.		1 - enabled
 
 
 void rgb_Show(float r, float g, float b, uint8_t brightness)
