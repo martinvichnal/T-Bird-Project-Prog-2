@@ -153,16 +153,34 @@
     <Compile Include="delay.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="delay.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="led.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="led.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="matrix.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="matrix.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="rgb.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="rgb.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="sevenSegment.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sevenSegment.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
