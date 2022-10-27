@@ -18,6 +18,7 @@ int timerNum = 0;
 uint8_t ido;
 uint8_t b;
 
+// Menu region. Contains Menus, sub menus and their pointer variables
 #pragma region menu
 
 // Implementing in PROGMEM in order not to occupy any cpu ram.
