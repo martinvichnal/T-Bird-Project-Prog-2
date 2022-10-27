@@ -23,10 +23,10 @@ int main(void)
 {
 	init();
 	
+	rgb_Show(0, 0, 100, 100);
+	
 	while (1)
 	{
-		//rgb_Show(0, 0, 100, 100);
-
 		b = matrix();
 		if (b <= 9)
 		{
@@ -37,11 +37,9 @@ int main(void)
 
 
 ISR(TIMER0_OVF_vect)
-{
-	//rgb_pwm_handling();
-	
+{	
+	rgb_pwm_handling();
 	//sevenSegment_PutNumber(timerNum);
-	
 
 	if (!ido--)
 	{
@@ -83,8 +81,6 @@ void init()
 	
 	// Timer init:
 	TCCR0 = 0 << CS02 | 1 << CS01 | 0 << CS00 | 1 << WGM00 | 1 << WGM01;
-	//TCCR0 = 1 << CS01 | 1 << CS00;
 	TIMSK = 1 << TOIE0;				// OverFlow enable
 	sei();
-	
 }

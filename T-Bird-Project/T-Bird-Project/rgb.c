@@ -45,31 +45,40 @@ void rgb_pwm_handling()
 		h_blue++;
 		
 		// Switching the RED led with PWM
-		if (h_red > pwm_red)
+		if (h_red >= pwm_red)
 		{
-			PORTC &=~ (1<<PC7);
-			if (h_red > 100)
+			PORTC &= ~(1<<PC7);
+			if (h_red >= 100)
 			h_red = 0;
 		}
-		else { PORTC |= (1<<PC7); }
+		else
+		{
+			PORTC |= (1<<PC7);
+		}
 		
 		// Switching the GREEN led with PWM
-		if (h_green > pwm_green)
+		if (h_green >= pwm_green)
 		{
 			PORTE &=~ (1<<PE2);
-			if (h_green > 100)
+			if (h_green >= 100)
 			h_green = 0;
 		}
-		else { PORTE |= (1<<PE2); }
+		else
+		{
+			PORTE |= (1<<PE2);
+		}
 		
 		// Switching the BLUE led with PWM
-		if (h_blue > pwm_blue)
+		if (h_blue >= pwm_blue)
 		{
 			PORTE &=~ (1<<PE3);
-			if (h_blue > 100)
+			if (h_blue >= 100)
 			h_blue = 0;
 		}
-		else { PORTE |= (1<<PE3); }
+		else
+		{
+			PORTE |= (1<<PE3);
+		}
 	}
 }
 
