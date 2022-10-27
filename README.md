@@ -62,6 +62,7 @@ Chip|Pinout|Datasheet
 * [AVR fuse calculator](http://www.engbedded.com/fusecalc)
 * [AVR timer calculator](http://eleccelerator.com/avr-timer-calculator/)
 * [T-bird](https://t-bird.webnode.hu/)
+* [Memory](https://scienceprog.com/avr-microcontroller-memory-map/)
 
 -----------------------------------------------------
 # Usefull code parts
