@@ -9,7 +9,7 @@
 #include "matrix.h"
 #include "rgb.h"
 #include "sevenSegment.h"
-
+#include "lcd.h"
 
 // Ports/Timer/Interrupts initialization
 void init();
@@ -62,6 +62,12 @@ int main(void)
 {
 	init();
 	
+	//lcd_init();
+	//lcd_write_cmd(0x01);
+	//lcd_Puts("Vichnal Martin");
+	//lcd_write_cmd(0xC0);
+	//lcd_Puts("Hello World!");
+	
 	rgb_Show(0, 0, 100, 100);
 	
 	while (1)
@@ -76,7 +82,7 @@ int main(void)
 
 
 ISR(TIMER0_OVF_vect)
-{	
+{
 	rgb_pwm_handling();
 	//sevenSegment_PutNumber(timerNum);
 
