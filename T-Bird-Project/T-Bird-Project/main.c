@@ -18,6 +18,45 @@ int timerNum = 0;
 uint8_t ido;
 uint8_t b;
 
+#pragma region menu
+
+// Implementing in PROGMEM in order not to occupy any cpu ram.
+// It is stored in flash memo. 
+
+// Main string menu system 1-4
+const uint8_t M100[] PROGMEM="<<Game>>\0";			//menu 1
+const uint8_t M200[] PROGMEM="<<Menu2>>\0";			//menu 2
+const uint8_t M300[] PROGMEM="<<Menu3>>\0";			//menu 3
+
+// SubMenu strings within main menu.
+/* Menu 1 sub menus */
+const uint8_t M101[] PROGMEM="Start\0";				// Start
+/* Menu 2 sub menus */
+const uint8_t M201[] PROGMEM="R ON\0";				// Setting R led
+const uint8_t M202[] PROGMEM="G ON\0";				// Setting G led
+const uint8_t M203[] PROGMEM="B ON\0";				// Setting B led
+
+
+// Pointers for menu strings
+const uint8_t *MENU[] ={
+	M100,							//menu 1 string
+	M200,							//menu 2 string
+	M300							//menu 3 string
+};
+
+// Pointers for sub menus
+const uint8_t *SUBMENU[] ={
+	M101, M201, M202, M203			//sub menus of menu 1
+};
+
+
+struct Menu_State{
+	uint8_t menuNo;//1,2,3,4
+	uint8_t subMenuNo;//1,2,3
+}MN;
+
+#pragma endregion menu
+
 
 int main(void)
 {
@@ -51,6 +90,7 @@ ISR(TIMER0_OVF_vect)
 		}
 	}
 }
+
 
 
 void init()
