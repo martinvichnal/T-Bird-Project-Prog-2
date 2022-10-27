@@ -21,12 +21,12 @@ void sevenSegment_PutDigit(uint8_t digit, uint8_t num)
 }
 void sevenSegment_PutNumber(int num)
 {
-	// Digit valaszto:			// Helyiertekek
+	// Digit valaszto:				// Helyiertekek
 	digit[0] = num % 10;			// egyes
 	digit[1] = (num / 10) % 10;		// tizes
 	digit[2] = (num / 100) % 10;	// szazas
 	digit[3] = (num / 1000) % 10;	// ezrese
 	
-	j = (j + 1) % 4;			// Hany Digites
+	j = (j + 1) % 4;				// Hany Digites
 	sevenSegment_PutDigit(j, digit[j]);
 }

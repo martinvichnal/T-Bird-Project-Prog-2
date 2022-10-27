@@ -26,7 +26,7 @@ int main(void)
 	while (1)
 	{
 		//rgb_Show(0, 0, 100, 100);
-		//rgb_Rainbow();
+
 		b = matrix();
 		if (b <= 9)
 		{
@@ -38,7 +38,7 @@ int main(void)
 
 ISR(TIMER0_OVF_vect)
 {
-	rgb_pwm_handling();
+	//rgb_pwm_handling();
 	
 	//sevenSegment_PutNumber(timerNum);
 	
