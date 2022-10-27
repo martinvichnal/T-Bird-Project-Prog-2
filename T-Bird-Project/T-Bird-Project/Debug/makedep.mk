@@ -4,6 +4,8 @@
 
 delay.c
 
+lcd.c
+
 led.c
 
 main.c
