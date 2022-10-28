@@ -42,6 +42,7 @@ c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/..
 Allocating common symbols
 Common symbol       size              file
 
+MN                  0x2               main.o
 ido                 0x1               main.o
 
 Discarded input sections
@@ -85,6 +86,15 @@ Discarded input sections
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
+ .data.SUBMENU  0x00000000        0x8 main.o
+ .data.MENU     0x00000000        0x6 main.o
+ .rodata.M203   0x00000000        0x6 main.o
+ .rodata.M202   0x00000000        0x6 main.o
+ .rodata.M201   0x00000000        0x6 main.o
+ .rodata.M101   0x00000000        0x7 main.o
+ .rodata.M300   0x00000000        0xb main.o
+ .rodata.M200   0x00000000        0xb main.o
+ .rodata.M100   0x00000000        0xa main.o
  .text          0x00000000        0x0 matrix.o
  .data          0x00000000        0x0 matrix.o
  .bss           0x00000000        0x0 matrix.o
@@ -593,7 +603,7 @@ END GROUP
                 0x0080012a                _edata = .
                 0x0080012a                PROVIDE (__data_end, .)
 
-.bss            0x0080012a       0x1c
+.bss            0x0080012a       0x1e
                 0x0080012a                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
@@ -615,17 +625,18 @@ END GROUP
  .bss.b         0x00800144        0x1 rgb.o
                 0x00800144                b
  *(COMMON)
- COMMON         0x00800145        0x1 main.o
-                0x00800145                ido
-                0x00800146                PROVIDE (__bss_end, .)
+ COMMON         0x00800145        0x3 main.o
+                0x00800145                MN
+                0x00800147                ido
+                0x00800148                PROVIDE (__bss_end, .)
                 0x00000934                __data_load_start = LOADADDR (.data)
                 0x0000095e                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800146        0x0
+.noinit         0x00800148        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800146                _end = .
+                0x00800148                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -707,29 +718,29 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x1286
+.debug_info     0x00000000     0x13f7
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x780 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega128/avr51/crtatmega128.o
  .debug_info    0x00000780      0x426 lcd.o
- .debug_info    0x00000ba6      0x21b main.o
- .debug_info    0x00000dc1      0x16a matrix.o
- .debug_info    0x00000f2b      0x35b rgb.o
+ .debug_info    0x00000ba6      0x38c main.o
+ .debug_info    0x00000f32      0x16a matrix.o
+ .debug_info    0x0000109c      0x35b rgb.o
 
-.debug_abbrev   0x00000000      0xbbe
+.debug_abbrev   0x00000000      0xbfe
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x718 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega128/avr51/crtatmega128.o
  .debug_abbrev  0x00000718      0x167 lcd.o
- .debug_abbrev  0x0000087f       0xe0 main.o
- .debug_abbrev  0x0000095f      0x103 matrix.o
- .debug_abbrev  0x00000a62      0x15c rgb.o
+ .debug_abbrev  0x0000087f      0x120 main.o
+ .debug_abbrev  0x0000099f      0x103 matrix.o
+ .debug_abbrev  0x00000aa2      0x15c rgb.o
 
-.debug_line     0x00000000      0x99b
+.debug_line     0x00000000      0x99c
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x16a C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega128/avr51/crtatmega128.o
  .debug_line    0x0000016a      0x305 lcd.o
- .debug_line    0x0000046f      0x19a main.o
- .debug_line    0x00000609      0x15d matrix.o
- .debug_line    0x00000766      0x235 rgb.o
+ .debug_line    0x0000046f      0x19b main.o
+ .debug_line    0x0000060a      0x15d matrix.o
+ .debug_line    0x00000767      0x235 rgb.o
 
 .debug_frame    0x00000000      0x234
  *(.debug_frame)
@@ -738,16 +749,16 @@ END GROUP
  .debug_frame   0x00000114       0x24 matrix.o
  .debug_frame   0x00000138       0xfc rgb.o
 
-.debug_str      0x00000000      0x532
+.debug_str      0x00000000      0x5d8
  *(.debug_str)
  .debug_str     0x00000000      0x27d C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega128/avr51/crtatmega128.o
- .debug_str     0x0000027d      0x1e7 lcd.o
-                                0x22a (size before relaxing)
- .debug_str     0x00000464       0x4d main.o
-                                0x1e8 (size before relaxing)
- .debug_str     0x000004b1       0x24 matrix.o
+ .debug_str     0x0000027d      0x1f3 lcd.o
+                                0x236 (size before relaxing)
+ .debug_str     0x00000470       0x9d main.o
+                                0x249 (size before relaxing)
+ .debug_str     0x0000050d       0x6e matrix.o
                                 0x1ec (size before relaxing)
- .debug_str     0x000004d5       0x5d rgb.o
+ .debug_str     0x0000057b       0x5d rgb.o
                                 0x23e (size before relaxing)
 
 .debug_loc      0x00000000      0x844

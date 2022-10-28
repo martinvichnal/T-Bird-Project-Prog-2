@@ -21,21 +21,18 @@ uint8_t b;
 // Menu region. Contains Menus, sub menus and their pointer variables
 #pragma region menu
 
-// Implementing in PROGMEM in order not to occupy any cpu ram.
-// It is stored in flash memo. 
-
 // Main string menu system 1-4
-const uint8_t M100[] PROGMEM="<<Game>>\0";			//menu 1
-const uint8_t M200[] PROGMEM="<<Menu2>>\0";			//menu 2
-const uint8_t M300[] PROGMEM="<<Menu3>>\0";			//menu 3
+const uint8_t M100[] = "<<Game>>\0";			//menu 1
+const uint8_t M200[] ="<<Menu2>>\0";			//menu 2
+const uint8_t M300[] ="<<Menu3>>\0";			//menu 3
 
 // SubMenu strings within main menu.
 /* Menu 1 sub menus */
-const uint8_t M101[] PROGMEM="Start\0";				// Start
+const uint8_t M101[] ="Start\0";				// Start
 /* Menu 2 sub menus */
-const uint8_t M201[] PROGMEM="R ON\0";				// Setting R led
-const uint8_t M202[] PROGMEM="G ON\0";				// Setting G led
-const uint8_t M203[] PROGMEM="B ON\0";				// Setting B led
+const uint8_t M201[] ="R ON\0";				// Setting R led
+const uint8_t M202[] ="G ON\0";				// Setting G led
+const uint8_t M203[] ="B ON\0";				// Setting B led
 
 
 // Pointers for menu strings
@@ -63,11 +60,11 @@ int main(void)
 {
 	init();
 	
-	//lcd_init();
-	//lcd_write_cmd(0x01);
-	//lcd_Puts("Vichnal Martin");
-	//lcd_write_cmd(0xC0);
-	//lcd_Puts("Hello World!");
+	lcd_init();
+	lcd_write_cmd(0x01);
+	lcd_Puts("Vichnal Martin");
+	lcd_write_cmd(0xC0);
+	lcd_Puts("Hello World!");
 	
 	rgb_Show(0, 0, 100, 100);
 	

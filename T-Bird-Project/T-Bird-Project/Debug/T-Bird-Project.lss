@@ -7,7 +7,7 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, DATA
   1 .text         00000934  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          0000001c  0080012a  0080012a  000009f2  2**0
+  2 .bss          0000001e  0080012a  0080012a  000009f2  2**0
                   ALLOC
   3 .comment      00000030  00000000  00000000  000009f2  2**0
                   CONTENTS, READONLY
@@ -15,19 +15,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 000000c8  00000000  00000000  00000a60  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00001286  00000000  00000000  00000b28  2**0
+  6 .debug_info   000013f7  00000000  00000000  00000b28  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000bbe  00000000  00000000  00001dae  2**0
+  7 .debug_abbrev 00000bfe  00000000  00000000  00001f1f  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   0000099b  00000000  00000000  0000296c  2**0
+  8 .debug_line   0000099c  00000000  00000000  00002b1d  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000234  00000000  00000000  00003308  2**2
+  9 .debug_frame  00000234  00000000  00000000  000034bc  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000532  00000000  00000000  0000353c  2**0
+ 10 .debug_str    000005d8  00000000  00000000  000036f0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000844  00000000  00000000  00003a6e  2**0
+ 11 .debug_loc    00000844  00000000  00000000  00003cc8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000088  00000000  00000000  000042b2  2**0
+ 12 .debug_ranges 00000088  00000000  00000000  0000450c  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -137,7 +137,7 @@ Disassembly of section .text:
   ba:	1d 92       	st	X+, r1
 
 000000bc <.do_clear_bss_start>:
-  bc:	a6 34       	cpi	r26, 0x46	; 70
+  bc:	a8 34       	cpi	r26, 0x48	; 72
   be:	b2 07       	cpc	r27, r18
   c0:	e1 f7       	brne	.-8      	; 0xba <.do_clear_bss_loop>
   c2:	29 d1       	rcall	.+594    	; 0x316 <main>
@@ -181,11 +181,11 @@ void lcd_busy(void)
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-  e8:	82 e0       	ldi	r24, 0x02	; 2
+  e8:	85 e0       	ldi	r24, 0x05	; 5
   ea:	8a 95       	dec	r24
   ec:	f1 f7       	brne	.-4      	; 0xea <lcd_busy+0x22>
-  ee:	00 c0       	rjmp	.+0      	; 0xf0 <lcd_busy+0x28>
-		_delay_us(1);						//felfutó
+  ee:	00 00       	nop
+		_delay_us(2);						//felfutó
 		busy=(LCD_DATA_PIN&(1<<PE7));		//átadjuk a BF értékét
   f0:	81 b1       	in	r24, 0x01	; 1
   f2:	80 78       	andi	r24, 0x80	; 128
@@ -193,29 +193,29 @@ void lcd_busy(void)
   f4:	90 81       	ld	r25, Z
   f6:	97 7f       	andi	r25, 0xF7	; 247
   f8:	90 83       	st	Z, r25
-  fa:	92 e0       	ldi	r25, 0x02	; 2
+  fa:	95 e0       	ldi	r25, 0x05	; 5
   fc:	9a 95       	dec	r25
   fe:	f1 f7       	brne	.-4      	; 0xfc <lcd_busy+0x34>
- 100:	00 c0       	rjmp	.+0      	; 0x102 <lcd_busy+0x3a>
-		_delay_us(1);
+ 100:	00 00       	nop
+		_delay_us(2);
 		LCD_CMD_PORT |= (1<<LCD_EN);		//EN<-1
  102:	90 81       	ld	r25, Z
  104:	98 60       	ori	r25, 0x08	; 8
  106:	90 83       	st	Z, r25
- 108:	92 e0       	ldi	r25, 0x02	; 2
+ 108:	95 e0       	ldi	r25, 0x05	; 5
  10a:	9a 95       	dec	r25
  10c:	f1 f7       	brne	.-4      	; 0x10a <lcd_busy+0x42>
- 10e:	00 c0       	rjmp	.+0      	; 0x110 <lcd_busy+0x48>
-		_delay_us(1);
+ 10e:	00 00       	nop
+		_delay_us(2);
 		LCD_CMD_PORT &= ~(1<<LCD_EN);		//EN<-0
  110:	90 81       	ld	r25, Z
  112:	97 7f       	andi	r25, 0xF7	; 247
  114:	90 83       	st	Z, r25
- 116:	92 e0       	ldi	r25, 0x02	; 2
+ 116:	95 e0       	ldi	r25, 0x05	; 5
  118:	9a 95       	dec	r25
  11a:	f1 f7       	brne	.-4      	; 0x118 <lcd_busy+0x50>
- 11c:	00 c0       	rjmp	.+0      	; 0x11e <lcd_busy+0x56>
-		_delay_us(1);
+ 11c:	00 00       	nop
+		_delay_us(2);
 	}while(busy);
  11e:	81 11       	cpse	r24, r1
  120:	de cf       	rjmp	.-68     	; 0xde <lcd_busy+0x16>
@@ -513,10 +513,10 @@ ISR(TIMER0_OVF_vect)
 	//sevenSegment_PutNumber(timerNum);
 
 	if (!ido--)
- 266:	80 91 45 01 	lds	r24, 0x0145	; 0x800145 <ido>
+ 266:	80 91 47 01 	lds	r24, 0x0147	; 0x800147 <ido>
  26a:	9f ef       	ldi	r25, 0xFF	; 255
  26c:	98 0f       	add	r25, r24
- 26e:	90 93 45 01 	sts	0x0145, r25	; 0x800145 <ido>
+ 26e:	90 93 47 01 	sts	0x0147, r25	; 0x800147 <ido>
  272:	81 11       	cpse	r24, r1
  274:	10 c0       	rjmp	.+32     	; 0x296 <__vector_16+0x58>
 	{
@@ -636,7 +636,7 @@ void init()
  314:	08 95       	ret
 
 00000316 <main>:
-uint8_t b;
+#pragma endregion menu
 
 
 int main(void)
@@ -677,8 +677,6 @@ int main(void)
  346:	b9 01       	movw	r22, r18
  348:	29 d0       	rcall	.+82     	; 0x39c <rgb_Show>
 	
-
-	
 	while (1)
 	{
 		b = matrix();
@@ -694,24 +692,11 @@ int main(void)
  358:	f8 cf       	rjmp	.-16     	; 0x34a <main+0x34>
 
 0000035a <matrix>:
-// 0   1   2   3   4   5   6   7   8   9   *   # billentyuk
-const unsigned char bill[12]={69, 14, 13, 11, 22, 21, 19, 38, 37, 35, 70, 67};
-
-uint8_t matrix()
-{
-	uint8_t sor = 0x08;		// elso sor
  35a:	38 e0       	ldi	r19, 0x08	; 8
-	uint8_t beolvas = 0;
-	uint8_t i = 0;
-	
-	while (sor <= 0x40)
  35c:	1b c0       	rjmp	.+54     	; 0x394 <matrix+0x3a>
-	{
-		PORTC &= 0x80;
  35e:	85 b3       	in	r24, 0x15	; 21
  360:	80 78       	andi	r24, 0x80	; 128
  362:	85 bb       	out	0x15, r24	; 21
-		PORTC |= sor;			// megcimezzuk a sort
  364:	85 b3       	in	r24, 0x15	; 21
  366:	83 2b       	or	r24, r19
  368:	85 bb       	out	0x15, r24	; 21
@@ -721,17 +706,10 @@ uint8_t matrix()
  370:	f1 f7       	brne	.-4      	; 0x36e <matrix+0x14>
  372:	00 c0       	rjmp	.+0      	; 0x374 <matrix+0x1a>
  374:	00 00       	nop
-		_delay_ms(5);
-		
-		beolvas = PINC & 0x7F;	// ne modositsa az RGB piros allpota.
  376:	23 b3       	in	r18, 0x13	; 19
  378:	2f 77       	andi	r18, 0x7F	; 127
-		
-		while(i < 12)
  37a:	80 e0       	ldi	r24, 0x00	; 0
  37c:	08 c0       	rjmp	.+16     	; 0x38e <matrix+0x34>
-		{
-			if (bill[i] == beolvas)
  37e:	e8 2f       	mov	r30, r24
  380:	f0 e0       	ldi	r31, 0x00	; 0
  382:	e3 5e       	subi	r30, 0xE3	; 227
@@ -739,50 +717,16 @@ uint8_t matrix()
  386:	90 81       	ld	r25, Z
  388:	29 17       	cp	r18, r25
  38a:	39 f0       	breq	.+14     	; 0x39a <matrix+0x40>
-			{
-				return i;
-			}
-			i++;
  38c:	8f 5f       	subi	r24, 0xFF	; 255
-		PORTC |= sor;			// megcimezzuk a sort
-		_delay_ms(5);
-		
-		beolvas = PINC & 0x7F;	// ne modositsa az RGB piros allpota.
-		
-		while(i < 12)
  38e:	8c 30       	cpi	r24, 0x0C	; 12
  390:	b0 f3       	brcs	.-20     	; 0x37e <matrix+0x24>
-				return i;
-			}
-			i++;
-		}
-		i = 0;
-		sor<<=1;
  392:	33 0f       	add	r19, r19
-{
-	uint8_t sor = 0x08;		// elso sor
-	uint8_t beolvas = 0;
-	uint8_t i = 0;
-	
-	while (sor <= 0x40)
  394:	31 34       	cpi	r19, 0x41	; 65
  396:	18 f3       	brcs	.-58     	; 0x35e <matrix+0x4>
-			i++;
-		}
-		i = 0;
-		sor<<=1;
-	}
-	return 12;
  398:	8c e0       	ldi	r24, 0x0C	; 12
  39a:	08 95       	ret
 
 0000039c <rgb_Show>:
-// enable bit for PWM.		1 - enabled
-uint8_t rgb_enable = 1;
-
-
-void rgb_Show(float r, float g, float b, uint8_t brightness)
-{
  39c:	4f 92       	push	r4
  39e:	5f 92       	push	r5
  3a0:	6f 92       	push	r6
@@ -803,9 +747,6 @@ void rgb_Show(float r, float g, float b, uint8_t brightness)
  3be:	00 d0       	rcall	.+0      	; 0x3c0 <rgb_Show+0x24>
  3c0:	cd b7       	in	r28, 0x3d	; 61
  3c2:	de b7       	in	r29, 0x3e	; 62
-	float x = 100 / brightness;
-
-	if(brightness != 0)
  3c4:	cc 20       	and	r12, r12
  3c6:	09 f4       	brne	.+2      	; 0x3ca <rgb_Show+0x2e>
  3c8:	3f c0       	rjmp	.+126    	; 0x448 <__LOCK_REGION_LENGTH__+0x48>
@@ -817,8 +758,6 @@ void rgb_Show(float r, float g, float b, uint8_t brightness)
  3d4:	5a 01       	movw	r10, r20
  3d6:	2b 01       	movw	r4, r22
  3d8:	3c 01       	movw	r6, r24
-	{
-		x = (100 / (float)brightness);
  3da:	6c 2d       	mov	r22, r12
  3dc:	70 e0       	ldi	r23, 0x00	; 0
  3de:	80 e0       	ldi	r24, 0x00	; 0
@@ -833,7 +772,6 @@ void rgb_Show(float r, float g, float b, uint8_t brightness)
  3f0:	81 d1       	rcall	.+770    	; 0x6f4 <__divsf3>
  3f2:	6b 01       	movw	r12, r22
  3f4:	7c 01       	movw	r14, r24
-		pwm_red = r / x;
  3f6:	9b 01       	movw	r18, r22
  3f8:	ac 01       	movw	r20, r24
  3fa:	c3 01       	movw	r24, r6
@@ -843,7 +781,6 @@ void rgb_Show(float r, float g, float b, uint8_t brightness)
  404:	70 93 41 01 	sts	0x0141, r23	; 0x800141 <pwm_red+0x1>
  408:	80 93 42 01 	sts	0x0142, r24	; 0x800142 <pwm_red+0x2>
  40c:	90 93 43 01 	sts	0x0143, r25	; 0x800143 <pwm_red+0x3>
-		pwm_green = g / x;
  410:	a7 01       	movw	r20, r14
  412:	96 01       	movw	r18, r12
  414:	c5 01       	movw	r24, r10
@@ -853,7 +790,6 @@ void rgb_Show(float r, float g, float b, uint8_t brightness)
  41e:	70 93 39 01 	sts	0x0139, r23	; 0x800139 <pwm_green+0x1>
  422:	80 93 3a 01 	sts	0x013A, r24	; 0x80013a <pwm_green+0x2>
  426:	90 93 3b 01 	sts	0x013B, r25	; 0x80013b <pwm_green+0x3>
-		pwm_blue = b / x;
  42a:	a7 01       	movw	r20, r14
  42c:	96 01       	movw	r18, r12
  42e:	69 81       	ldd	r22, Y+1	; 0x01
@@ -865,8 +801,6 @@ void rgb_Show(float r, float g, float b, uint8_t brightness)
  43c:	70 93 31 01 	sts	0x0131, r23	; 0x800131 <pwm_blue+0x1>
  440:	80 93 32 01 	sts	0x0132, r24	; 0x800132 <pwm_blue+0x2>
  444:	90 93 33 01 	sts	0x0133, r25	; 0x800133 <pwm_blue+0x3>
-	}
-}
  448:	0f 90       	pop	r0
  44a:	0f 90       	pop	r0
  44c:	0f 90       	pop	r0
@@ -890,21 +824,14 @@ void rgb_Show(float r, float g, float b, uint8_t brightness)
  470:	08 95       	ret
 
 00000472 <rgb_pwm_handling>:
-
-
-void rgb_pwm_handling()
-{
  472:	cf 92       	push	r12
  474:	df 92       	push	r13
  476:	ef 92       	push	r14
  478:	ff 92       	push	r15
-	if (rgb_enable)
  47a:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
  47e:	88 23       	and	r24, r24
  480:	09 f4       	brne	.+2      	; 0x484 <rgb_pwm_handling+0x12>
  482:	ce c0       	rjmp	.+412    	; 0x620 <rgb_pwm_handling+0x1ae>
-	{
-		h_red++;
  484:	20 e0       	ldi	r18, 0x00	; 0
  486:	30 e0       	ldi	r19, 0x00	; 0
  488:	40 e8       	ldi	r20, 0x80	; 128
@@ -920,7 +847,6 @@ void rgb_pwm_handling()
  4a6:	70 93 3d 01 	sts	0x013D, r23	; 0x80013d <h_red+0x1>
  4aa:	80 93 3e 01 	sts	0x013E, r24	; 0x80013e <h_red+0x2>
  4ae:	90 93 3f 01 	sts	0x013F, r25	; 0x80013f <h_red+0x3>
-		h_green++;
  4b2:	20 e0       	ldi	r18, 0x00	; 0
  4b4:	30 e0       	ldi	r19, 0x00	; 0
  4b6:	40 e8       	ldi	r20, 0x80	; 128
@@ -934,7 +860,6 @@ void rgb_pwm_handling()
  4d0:	70 93 35 01 	sts	0x0135, r23	; 0x800135 <h_green+0x1>
  4d4:	80 93 36 01 	sts	0x0136, r24	; 0x800136 <h_green+0x2>
  4d8:	90 93 37 01 	sts	0x0137, r25	; 0x800137 <h_green+0x3>
-		h_blue++;
  4dc:	20 e0       	ldi	r18, 0x00	; 0
  4de:	30 e0       	ldi	r19, 0x00	; 0
  4e0:	40 e8       	ldi	r20, 0x80	; 128
@@ -948,9 +873,6 @@ void rgb_pwm_handling()
  4fa:	70 93 2d 01 	sts	0x012D, r23	; 0x80012d <h_blue+0x1>
  4fe:	80 93 2e 01 	sts	0x012E, r24	; 0x80012e <h_blue+0x2>
  502:	90 93 2f 01 	sts	0x012F, r25	; 0x80012f <h_blue+0x3>
-		
-		// Switching the RED led with PWM
-		if (h_red >= pwm_red)
  506:	20 91 40 01 	lds	r18, 0x0140	; 0x800140 <pwm_red>
  50a:	30 91 41 01 	lds	r19, 0x0141	; 0x800141 <pwm_red+0x1>
  50e:	40 91 42 01 	lds	r20, 0x0142	; 0x800142 <pwm_red+0x2>
@@ -960,12 +882,9 @@ void rgb_pwm_handling()
  51a:	e2 d1       	rcall	.+964    	; 0x8e0 <__gesf2>
  51c:	88 23       	and	r24, r24
  51e:	dc f0       	brlt	.+54     	; 0x556 <rgb_pwm_handling+0xe4>
-		{
-			PORTC &= ~(1<<PC7);
  520:	85 b3       	in	r24, 0x15	; 21
  522:	8f 77       	andi	r24, 0x7F	; 127
  524:	85 bb       	out	0x15, r24	; 21
-			if (h_red >= 100)
  526:	60 91 3c 01 	lds	r22, 0x013C	; 0x80013c <h_red>
  52a:	70 91 3d 01 	lds	r23, 0x013D	; 0x80013d <h_red+0x1>
  52e:	80 91 3e 01 	lds	r24, 0x013E	; 0x80013e <h_red+0x2>
@@ -977,23 +896,14 @@ void rgb_pwm_handling()
  53e:	d0 d1       	rcall	.+928    	; 0x8e0 <__gesf2>
  540:	88 23       	and	r24, r24
  542:	64 f0       	brlt	.+24     	; 0x55c <rgb_pwm_handling+0xea>
-			h_red = 0;
  544:	10 92 3c 01 	sts	0x013C, r1	; 0x80013c <h_red>
  548:	10 92 3d 01 	sts	0x013D, r1	; 0x80013d <h_red+0x1>
  54c:	10 92 3e 01 	sts	0x013E, r1	; 0x80013e <h_red+0x2>
  550:	10 92 3f 01 	sts	0x013F, r1	; 0x80013f <h_red+0x3>
  554:	03 c0       	rjmp	.+6      	; 0x55c <rgb_pwm_handling+0xea>
-		}
-		else
-		{
-			PORTC |= (1<<PC7);
  556:	85 b3       	in	r24, 0x15	; 21
  558:	80 68       	ori	r24, 0x80	; 128
  55a:	85 bb       	out	0x15, r24	; 21
-		}
-		
-		// Switching the GREEN led with PWM
-		if (h_green >= pwm_green)
  55c:	60 91 34 01 	lds	r22, 0x0134	; 0x800134 <h_green>
  560:	70 91 35 01 	lds	r23, 0x0135	; 0x800135 <h_green+0x1>
  564:	80 91 36 01 	lds	r24, 0x0136	; 0x800136 <h_green+0x2>
@@ -1005,12 +915,9 @@ void rgb_pwm_handling()
  57c:	b1 d1       	rcall	.+866    	; 0x8e0 <__gesf2>
  57e:	88 23       	and	r24, r24
  580:	dc f0       	brlt	.+54     	; 0x5b8 <rgb_pwm_handling+0x146>
-		{
-			PORTE &=~ (1<<PE2);
  582:	83 b1       	in	r24, 0x03	; 3
  584:	8b 7f       	andi	r24, 0xFB	; 251
  586:	83 b9       	out	0x03, r24	; 3
-			if (h_green >= 100)
  588:	60 91 34 01 	lds	r22, 0x0134	; 0x800134 <h_green>
  58c:	70 91 35 01 	lds	r23, 0x0135	; 0x800135 <h_green+0x1>
  590:	80 91 36 01 	lds	r24, 0x0136	; 0x800136 <h_green+0x2>
@@ -1022,23 +929,14 @@ void rgb_pwm_handling()
  5a0:	9f d1       	rcall	.+830    	; 0x8e0 <__gesf2>
  5a2:	88 23       	and	r24, r24
  5a4:	64 f0       	brlt	.+24     	; 0x5be <rgb_pwm_handling+0x14c>
-			h_green = 0;
  5a6:	10 92 34 01 	sts	0x0134, r1	; 0x800134 <h_green>
  5aa:	10 92 35 01 	sts	0x0135, r1	; 0x800135 <h_green+0x1>
  5ae:	10 92 36 01 	sts	0x0136, r1	; 0x800136 <h_green+0x2>
  5b2:	10 92 37 01 	sts	0x0137, r1	; 0x800137 <h_green+0x3>
  5b6:	03 c0       	rjmp	.+6      	; 0x5be <rgb_pwm_handling+0x14c>
-		}
-		else
-		{
-			PORTE |= (1<<PE2);
  5b8:	83 b1       	in	r24, 0x03	; 3
  5ba:	84 60       	ori	r24, 0x04	; 4
  5bc:	83 b9       	out	0x03, r24	; 3
-		}
-		
-		// Switching the BLUE led with PWM
-		if (h_blue >= pwm_blue)
  5be:	60 91 2c 01 	lds	r22, 0x012C	; 0x80012c <h_blue>
  5c2:	70 91 2d 01 	lds	r23, 0x012D	; 0x80012d <h_blue+0x1>
  5c6:	80 91 2e 01 	lds	r24, 0x012E	; 0x80012e <h_blue+0x2>
@@ -1050,12 +948,9 @@ void rgb_pwm_handling()
  5de:	80 d1       	rcall	.+768    	; 0x8e0 <__gesf2>
  5e0:	88 23       	and	r24, r24
  5e2:	dc f0       	brlt	.+54     	; 0x61a <rgb_pwm_handling+0x1a8>
-		{
-			PORTE &=~ (1<<PE3);
  5e4:	83 b1       	in	r24, 0x03	; 3
  5e6:	87 7f       	andi	r24, 0xF7	; 247
  5e8:	83 b9       	out	0x03, r24	; 3
-			if (h_blue >= 100)
  5ea:	60 91 2c 01 	lds	r22, 0x012C	; 0x80012c <h_blue>
  5ee:	70 91 2d 01 	lds	r23, 0x012D	; 0x80012d <h_blue+0x1>
  5f2:	80 91 2e 01 	lds	r24, 0x012E	; 0x80012e <h_blue+0x2>
@@ -1067,22 +962,14 @@ void rgb_pwm_handling()
  602:	6e d1       	rcall	.+732    	; 0x8e0 <__gesf2>
  604:	88 23       	and	r24, r24
  606:	64 f0       	brlt	.+24     	; 0x620 <rgb_pwm_handling+0x1ae>
-			h_blue = 0;
  608:	10 92 2c 01 	sts	0x012C, r1	; 0x80012c <h_blue>
  60c:	10 92 2d 01 	sts	0x012D, r1	; 0x80012d <h_blue+0x1>
  610:	10 92 2e 01 	sts	0x012E, r1	; 0x80012e <h_blue+0x2>
  614:	10 92 2f 01 	sts	0x012F, r1	; 0x80012f <h_blue+0x3>
  618:	03 c0       	rjmp	.+6      	; 0x620 <rgb_pwm_handling+0x1ae>
-		}
-		else
-		{
-			PORTE |= (1<<PE3);
  61a:	83 b1       	in	r24, 0x03	; 3
  61c:	88 60       	ori	r24, 0x08	; 8
  61e:	83 b9       	out	0x03, r24	; 3
-		}
-	}
-}
  620:	ff 90       	pop	r15
  622:	ef 90       	pop	r14
  624:	df 90       	pop	r13

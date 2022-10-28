@@ -89,14 +89,14 @@ void lcd_busy(void)
 	do{
 		busy = 0;
 		LCD_CMD_PORT |= (1<<LCD_EN);		//EN<-1
-		_delay_us(1);						//felfutó
+		_delay_us(2);						//felfutó
 		busy=(LCD_DATA_PIN&(1<<PE7));		//átadjuk a BF értékét
 		LCD_CMD_PORT &= ~(1<<LCD_EN);		//EN<-0
-		_delay_us(1);
+		_delay_us(2);
 		LCD_CMD_PORT |= (1<<LCD_EN);		//EN<-1
-		_delay_us(1);
+		_delay_us(2);
 		LCD_CMD_PORT &= ~(1<<LCD_EN);		//EN<-0
-		_delay_us(1);
+		_delay_us(2);
 	}while(busy);
 	
 	LCD_CMD_PORT &= ~(1<<LCD_RW);			//R/W<-0 write

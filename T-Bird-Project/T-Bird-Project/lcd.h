@@ -13,22 +13,22 @@
 #ifndef LCD_H_
 #define LCD_H_
 
-#define PORT_LCD_E	PORTF		// PORT
-#define DDR_LCD_E	DDRF		// DDR
-#define PIN_LCD_E	PF3			// BIT
+#define PORT_LCD_E		PORTF			// PORT
+#define DDR_LCD_E		DDRF			// DDR
+#define PIN_LCD_E		PF3				// BIT
 
-#define PORT_LCD_RW	PORTF		// PORT
-#define DDR_LCD_RW	DDRF		// DDR
-#define PIN_LCD_RW	PF2			// BIT
+#define PORT_LCD_RW		PORTF			// PORT
+#define DDR_LCD_RW		DDRF			// DDR
+#define PIN_LCD_RW		PF2				// BIT
 
-#define PORT_LCD_RS	PORTF		// PORT
-#define DDR_LCD_RS	DDRF		// DDR
-#define PIN_LCD_RS	PF1			// BIT
+#define PORT_LCD_RS		PORTF			// PORT
+#define DDR_LCD_RS		DDRF			// DDR
+#define PIN_LCD_RS		PF1				// BIT
 
-#define PORT_LCD_DATA	PORTE		// PORT
-#define DDR_LCD_DATA	DDRE		// DDR
-#define MASK_H_LCD_DATA	0xF0
-#define MASK_L_LCD_DATA	0x0F
+#define PORT_LCD_DATA		PORTE		// PORT
+#define DDR_LCD_DATA		DDRE		// DDR
+#define MASK_H_LCD_DATA		0xF0
+#define MASK_L_LCD_DATA		0x0F
 
 #define LCD_CMD_DDR		(DDRF)
 #define LCD_DATA_DDR	(DDRE)
