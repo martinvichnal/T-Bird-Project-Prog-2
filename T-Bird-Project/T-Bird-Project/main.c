@@ -13,26 +13,31 @@
 
 // Ports/Timer/Interrupts initialization
 void init();
+void game();
 
 int timerNum = 0;
 uint8_t ido;
 uint8_t b;
 
+int gameplay = 0;
+int kor = 0;
+int indicator = 0;
+
 // Menu region. Contains Menus, sub menus and their pointer variables
 #pragma region menu
 
 // Main string menu system 1-4
-const uint8_t M100[] = "<<Game>>\0";			//menu 1
-const uint8_t M200[] ="<<Menu2>>\0";			//menu 2
-const uint8_t M300[] ="<<Menu3>>\0";			//menu 3
+const uint8_t M100[] ="<<Game>>\0";		//menu 1
+const uint8_t M200[] ="<<Menu2>>\0";	//menu 2
+const uint8_t M300[] ="<<Menu3>>\0";	//menu 3
 
 // SubMenu strings within main menu.
 /* Menu 1 sub menus */
-const uint8_t M101[] ="Start\0";				// Start
+const uint8_t M101[] ="Start\0";	// Start
 /* Menu 2 sub menus */
-const uint8_t M201[] ="R ON\0";				// Setting R led
-const uint8_t M202[] ="G ON\0";				// Setting G led
-const uint8_t M203[] ="B ON\0";				// Setting B led
+const uint8_t M201[] ="R ON\0";		// Setting R led
+const uint8_t M202[] ="G ON\0";		// Setting G led
+const uint8_t M203[] ="B ON\0";		// Setting B led
 
 
 // Pointers for menu strings
@@ -56,13 +61,14 @@ struct Menu_State{
 #pragma endregion menu
 
 
+
 int main(void)
 {
 	init();
 	
 	lcd_init();
 	lcd_write_cmd(0x01);
-	lcd_Puts("Vichnal Martin");
+	lcd_Puts(MENU[1]);
 	lcd_write_cmd(0xC0);
 	lcd_Puts("Hello World!");
 	
@@ -70,10 +76,28 @@ int main(void)
 	
 	while (1)
 	{
-		b = matrix();
-		if (b <= 9)
-		{
-			PORTA = 0x80 | b;
+		//b = matrix();
+		//if (b <= 9)
+		//{
+		//PORTA = 0x80 | b;
+		//}
+
+		//kijelzés	-> menu
+
+		switch (indicator)
+		?{
+			case 0:
+			game();
+			break;
+
+
+			case 1:
+			break;
+
+
+			default:
+			break;
+
 		}
 	}
 }
@@ -127,4 +151,23 @@ void init()
 	TCCR0 = 0 << CS02 | 1 << CS01 | 0 << CS00 | 1 << WGM00 | 1 << WGM01;
 	TIMSK = 1 << TOIE0;				// OverFlow enable
 	sei();
+}
+
+
+void game()
+{
+	//player számok bekérése:	annak megfelel?en a játékmenet beállítása
+	//elindulás
+	while(gameplay)
+	{
+		//kör++;
+		//dobás gomb lenyomása:	random számot kapok
+		//várakozás (el?ben játszás. (hazudik vagy sem))
+		//megfelel? gombok lenyomása attól függ?en hogy veszített e életet vagy sem.
+		//ha nem veszített akkor health aktuális playernek nem változik de a player + 1 nek health -= 1
+		//ha a valakinek a healthje 0 akkor kiesett és az a player már nem számít bele a következ? körben
+		//következ? gomb lenyomása:	másik playerre váltás	player++;
+		//ha player > mint a defPlayer -> player = 0;
+	}
+	
 }
