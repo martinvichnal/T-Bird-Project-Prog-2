@@ -53,14 +53,23 @@ const uint8_t *SUBMENU[] ={
 };
 
 
-struct Menu_State{
-	uint8_t menuNo;//1,2,3,4
-	uint8_t subMenuNo;//1,2,3
+struct menuState{
+	uint8_t menuNum;
+	uint8_t subMenuNum;
 }MN;
 
 #pragma endregion menu
 
+#pragma region player
 
+struct playerState{
+	uint8_t playerID;
+	uint8_t playerHealth;
+	uint8_t playerRandomDiceNum;
+	uint8_t playerState;
+}PS;
+
+#pragma endregion player
 
 int main(void)
 {
@@ -73,6 +82,7 @@ int main(void)
 	lcd_Puts("Hello World!");
 	
 	rgb_Show(0, 0, 100, 100);
+	
 	
 	while (1)
 	{
