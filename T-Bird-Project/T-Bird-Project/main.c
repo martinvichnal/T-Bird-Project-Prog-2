@@ -5,19 +5,23 @@
 #include <avr/interrupt.h>
 
 #include "delay.h"
+#include "lcd.h"
 #include "led.h"
 #include "matrix.h"
 #include "rgb.h"
 #include "sevenSegment.h"
-#include "lcd.h"
+
+#define rndMax 9
+#define rndMin 1
 
 // Ports/Timer/Interrupts initialization
 void init();
 void game();
 
-int timerNum = 0;
-uint8_t ido;
 uint8_t b;
+
+uint8_t rnd = rndMin;
+int number = 0;
 
 int gameplay = 0;
 int kor = 0;
@@ -71,44 +75,34 @@ struct playerState{
 
 #pragma endregion player
 
+
 int main(void)
 {
 	init();
 	
 	lcd_init();
-	lcd_write_cmd(0x01);
-	lcd_Puts(MENU[1]);
-	lcd_write_cmd(0xC0);
-	lcd_Puts("Hello World!");
+	lcd_cmd(0x01);
 	
-	rgb_Show(0, 0, 100, 100);
-	
+	//rgb_Show(0, 255, 120, 255);
+	uint8_t r = 0;
+	uint8_t g = 0;
+	uint8_t b = 0;
 	
 	while (1)
 	{
+		//rgb_Show(r, g, b, 255);
+//
+		//if (r > 255)
+		//{
+			//r = 0;
+		//}
+
+		
 		//b = matrix();
 		//if (b <= 9)
 		//{
 		//PORTA = 0x80 | b;
 		//}
-
-		//kijelzés	-> menu
-
-		switch (indicator)
-		?{
-			case 0:
-			game();
-			break;
-
-
-			case 1:
-			break;
-
-
-			default:
-			break;
-
-		}
 	}
 }
 
@@ -116,17 +110,8 @@ int main(void)
 ISR(TIMER0_OVF_vect)
 {
 	rgb_pwm_handling();
+	
 	//sevenSegment_PutNumber(timerNum);
-
-	if (!ido--)
-	{
-		// 7segmens szamlalo
-		timerNum++;
-		if (timerNum == 9999)
-		{
-			timerNum = 0;
-		}
-	}
 }
 
 
@@ -136,30 +121,33 @@ void init()
 	// 1 - output
 	// 0 - input
 
+	// LEDS
 	DDRB &= 0x0F;	// led mask	-> 00001111 (0 - 3)
 	DDRB |= 0xF0;	// led		-> 11110000 (0 - 3)
 	DDRD &= 0x0F;	// led mask	-> 00001111 (0 - 3)
 	DDRD |= 0xF0;	// led		-> 11110000 (4 - 7)
 
-	//DDRG = 0x00;	// Pushbuttons K0-K4
+	// PUSHBUTTONS
 	DDRG &= 0xE0;	// Pushbuttons mask	-> 11100000	(K0 - K4)
 	DDRG |= 0x00;	// Pushbuttons		-> 00000000 (K0 - K4)
 	
+	// RGB LEDS
 	DDRE &= 0xF3;	// RGB mask	-> 11110011 (Blue & Green)
 	DDRE |= 0x0C;	// RGB led	-> 00001100 (Blue & Green)
 	DDRC &= 0x7F;	// RGB mask	-> 01111111 (Red)
 	DDRC |= 80;		// RGB led	-> 10000000 (Red)
 	
+	// 7 SEGMENT DISPLAY
 	DDRA = 0xFF;	// 7 Segment display
 	
-	// Matrix keyboard
+	// MATRIX KEYBOARD
 	DDRC &= 0x80;	// Matrix mask	->	10000000
 	DDRC |= 0x78;	// Matrix		->	01111000
 	
 	
-	// Timer init:
-	TCCR0 = 0 << CS02 | 1 << CS01 | 0 << CS00 | 1 << WGM00 | 1 << WGM01;
-	TIMSK = 1 << TOIE0;				// OverFlow enable
+	// TIMER INIT 
+	TCCR0 = 0 << CS02 | 0 << CS01 | 1 << CS00;
+	TIMSK |= 1 << TOIE0;				// OverFlow enable
 	sei();
 }
 

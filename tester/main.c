@@ -1,23 +1,61 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void brightnessDividing(int r, int g, int b, int brightness);
+void rgb_Show(int r, int g, int b, int brightness);
+//void brightnessDividing(int r, int g, int b, int brightness);
+
+float pwm_red = 0;
+float pwm_green = 0;
+float pwm_blue = 0;
 
 int main()
 {
-    int r = 100;
-    int b = 50;
-    int g = 0;
-    int brightness = 99;
+    int r = 255;
+    int b = 100;
+    int g = 24;
+    int brightness = 100;
 
-    for(brightness = 100; brightness > 0; brightness--)
+    // PWM values for RGB
+
+    rgb_Show(r,g,b,brightness);
+
+    /*for(brightness = 255; brightness > 100; brightness--)
     {
-        brightnessDividing(r, g, b, brightness);
-    }
+        //brightnessDividing(r, g, b, brightness);
 
+    }
+    */
 
     return 0;
 }
+
+
+void rgb_Show(int r, int g, int b, int brightness)
+{
+	float x = 0;
+
+	if(brightness != 0)
+	{
+		x = (255 / (float)brightness);
+		pwm_red = (float)r / x;
+		pwm_green = (float)g / x;
+		pwm_blue = (float)b / x;
+	}
+
+
+    printf("Brightness: %d\n", brightness);
+    printf("Divider: %f\n", x);
+    printf("Base Red value: %d\t", r);
+    printf("Red: %f\n", pwm_red);
+    printf("Base Green value: %d\t", g);
+    printf("Green: %f\n", pwm_green);
+    printf("Base Blue value: %d\t", b);
+    printf("Blue %f\n", pwm_blue);
+
+    printf("------------------- O -------------------\n");
+}
+
+
 
 
 void brightnessDividing(int r, int g, int b, int brightness)

@@ -22,7 +22,7 @@ uint8_t matrix()
 		PORTC |= sor;			// megcimezzuk a sort
 		_delay_ms(5);
 		
-		beolvas = PINC & 0x7F;	// ne modositsa az RGB piros allpota.
+		beolvas = (PINC & 0x7F);	// ne modositsa az RGB piros allpota.
 		
 		while(i < 12)
 		{
