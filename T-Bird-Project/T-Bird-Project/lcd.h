@@ -5,7 +5,7 @@
  *  Author: marti
  */ 
 
-#define F_CPU 8000000L
+#define F_CPU 16000000L
 #include <avr/io.h>
 #include <util/delay.h>
 #include <inttypes.h>

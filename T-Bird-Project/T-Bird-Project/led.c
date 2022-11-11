@@ -9,7 +9,7 @@
 
 uint8_t leds = 0x01;
 
-void led_Out(uint8_t led)
+void led_out(uint8_t led)
 {
 	PORTD = (led & 0xF0);
 	PORTB = ((led << 4) & 0xF0);
