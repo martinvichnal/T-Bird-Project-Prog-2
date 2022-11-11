@@ -41,7 +41,6 @@ void lcd_init()
 	//LCD_command(0x08 | (1<<LCD_E) | (1<<LCD_CUR) | (0<<LCD_BL));
 	//kurzor villog ki, aláhúzás ki, LCD be
 	lcd_cmd(0x08 | (1<<LCD_E) | (0<<LCD_CUR) | (0<<LCD_BL));
-	lcd_cmd(0x01);
 }
 
 void lcd_busy(void)
