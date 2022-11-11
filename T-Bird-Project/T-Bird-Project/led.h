@@ -5,7 +5,7 @@
  *  Author: marti
  */ 
 
-#define F_CPU 8000000L
+#define F_CPU 16000000L
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -14,6 +14,6 @@
 #ifndef LED_H_
 #define LED_H_
 
-void led_Out(uint8_t leds);
+void led_out(uint8_t leds);
 
 #endif /* LED_H_ */

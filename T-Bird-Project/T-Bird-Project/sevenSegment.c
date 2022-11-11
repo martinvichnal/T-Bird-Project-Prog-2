@@ -1,9 +1,9 @@
 /*
- * sevenSegment.c
- *
- * Created: 2022. 10. 15. 19:32:31
- *  Author: marti
- */ 
+* sevenSegment.c
+*
+* Created: 2022. 10. 15. 19:32:31
+*  Author: marti
+*/
 
 #include "sevenSegment.h"
 
@@ -13,20 +13,19 @@ int j = 0;
 void sevenSegment_PutDigit(uint8_t digit, uint8_t num)
 {
 	if (digit > 3)
-		return;
+	return;
 	if (num > 9)
-		return;
+	return;
 
 	PORTA = 0x80 | (digit) << 4 | num;
 }
 void sevenSegment_PutNumber(int num)
 {
-	// Digit valaszto:				// Helyiertekek
-	digit[0] = num % 10;			// egyes
-	digit[1] = (num / 10) % 10;		// tizes
-	digit[2] = (num / 100) % 10;	// szazas
-	digit[3] = (num / 1000) % 10;	// ezrese
+	digit[0] = num % 10;
+	digit[1] = (num / 10) % 10;
+	digit[2] = (num / 100) % 10;
+	digit[3] = (num / 1000) % 10;
 	
-	j = (j + 1) % 4;				// Hany Digites
+	j = (j + 1) % 4;
 	sevenSegment_PutDigit(j, digit[j]);
 }
