@@ -183,6 +183,12 @@
     <Compile Include="rgb.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="rnd.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="rnd.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="sevenSegment.c">
       <SubType>compile</SubType>
     </Compile>

@@ -14,5 +14,7 @@ matrix.c
 
 rgb.c
 
+rnd.c
+
 sevenSegment.c
 

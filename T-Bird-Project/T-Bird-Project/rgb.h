@@ -20,5 +20,7 @@ void rgb_Rainbow();
 
 void rgb_pwm_handling();
 
+void rgb_gameLights(uint8_t health);
+
 
 #endif /* RGB_H_ */

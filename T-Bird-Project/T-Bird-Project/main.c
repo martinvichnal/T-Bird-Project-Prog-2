@@ -9,27 +9,38 @@
 #include "led.h"
 #include "matrix.h"
 #include "rgb.h"
+#include "rnd.h"
 #include "sevenSegment.h"
 
+#define numberOfPlayers 5
 
 // Initializing ports, timers, interrupts
 void init();
 uint8_t counter = 0;		// Counter for Timer 1
 
-// Parameters, functions for gameplay
+// integer that sevenSegment_PutNumber() uses in Timer 1. /Can be change whenever/
+int sevenSegmentNum = 0;
+
+// Parameters, Function for game
 void game();
-int gameplay = 0;
-int kor = 0;
-int indicator = 0;
 
+int gameplay = 1;
+int actRound = 0;
+int stage = 0;						// this int checks if all the game stages has been played.
+int currentPlayer = 0;				// Current player used for the struct
+int tmpPreviousDice = 0;
+uint8_t tmpDiceButtonState = 0;		// temporary variable for pressing the dice button
+uint8_t tmpHealthButtonState = 0;	// temporary variable for pressing the WIN/LOSS button
+uint8_t tmpNextPlayerHasLost = 0;	// temporary variable for checking if the current player has won the round
 
-// Parameters, functions for generating a random number
-int rnd_new();
-#define rndMax 6
-#define rndMin 1
-uint8_t rnd = rndMin;
-int number = 0;
+uint8_t gameDebug = 1;
 
+// Player struct
+struct playerState{
+	uint8_t playerID;
+	uint8_t playerHealth;
+	uint8_t playerRandomDiceNum;
+};
 
 
 // Menu region. Contains Menus, sub menus and their pointer variables
@@ -69,39 +80,25 @@ struct menuState{
 
 #pragma endregion menu
 
-// Player struct
-#pragma region player
-
-struct playerState{
-	uint8_t playerID;
-	uint8_t playerHealth;
-	uint8_t playerRandomDiceNum;
-	uint8_t playerState;
-}PS;
-
-#pragma endregion player
 
 
 
 
-int tmpRndNum = 0;
+
 
 int main(void)
 {
 	init();
 	lcd_init();
 	
-	rgb_Show(255, 0, 0, 255);
-	
 	while (1)
 	{
-		tmpRndNum = rnd_new();
-		_delay_ms(1);
+		game();
 	}
 }
 
 
-// Timer 0 for controlling RGB leds with PWM
+// Timer 0 for controlling RGB LEDs with PWM
 ISR(TIMER0_OVF_vect)
 {
 	rgb_pwm_handling();
@@ -109,14 +106,14 @@ ISR(TIMER0_OVF_vect)
 
 
 // Timer 1 mainly used for seven segment display
-ISR(TIMER1_OVF_vect) 
+ISR(TIMER1_OVF_vect)
 {
-	sevenSegment_PutNumber(tmpRndNum);
-	counter++;
-	if (!counter)
-	{
-		PORTD ^= (1 << PB7); // flips the state of PD6
-	}
+	sevenSegment_PutNumber(sevenSegmentNum);
+	//counter++;
+	//if (!counter)
+	//{
+	//	  PORTD ^= (1 << PB7); // flips the state of PD6
+	//}
 }
 
 // Initializing ports
@@ -161,36 +158,95 @@ void init()
 }
 
 
+
+// Game function
 void game()
 {
-	//player számok bekérése:	annak megfelel?en a játékmenet beállítása
-	//elindulás
+	struct playerState player[numberOfPlayers];
+
 	while(gameplay)
 	{
-		//kör++;
-		//dobás gomb lenyomása:	random számot kapok
-		//várakozás (el?ben játszás. (hazudik vagy sem))
-		//megfelel? gombok lenyomása attól függ?en hogy veszített e életet vagy sem.
-		//ha nem veszített akkor health aktuális playernek nem változik de a player + 1 nek health -= 1
-		//ha a valakinek a healthje 0 akkor kiesett és az a player már nem számít bele a következ? körben
-		//következ? gomb lenyomása:	másik playerre váltás	player++;
-		//ha player > mint a defPlayer -> player = 0;
-	}
-	
-}
+		// Checking if the current player has lost in the previous round
+		if (tmpNextPlayerHasLost)
+		{
+			tmpNextPlayerHasLost = 0;					// reseting the temp variable for further use
+			player[currentPlayer].playerHealth--;		// taking away one health point
+		}
 
-// This function generates a random number between rndMin and rndMax	** This is not a true random number... but it works...**
-int rnd_new()
-{
-	int dice = 0;
-	
-	number = rand();			// rand() -> generating a random number between 0 and 7FFFFFFF
-	number &= rndMax + 1;		// cutting off digits to generate numbers between rndMin and rndMax
-	
-	dice = number;
-	
-	if (dice < rndMin)	{ dice = rndMin; }
-	if (dice > rndMax)	{ dice = rndMax; }
-	
-	return dice;
+		rgb_gameLights(player[currentPlayer].playerHealth);					// Showing the current health of the player with RGB LEDs
+
+		// ------------------------------ STAGE 1 ------------------------------
+		// Getting a dice number for the current player by pressing the 0. button
+		if(PING & (1<<PG0) && (tmpDiceButtonState != 1))
+		{
+			tmpDiceButtonState = 1;											// the current player has pressed the button once
+			player[currentPlayer].playerRandomDiceNum = rnd_miaDice(tmpPreviousDice);
+			tmpPreviousDice = player[currentPlayer].playerRandomDiceNum;	// setting the "previous" dice number for the next round
+			sevenSegmentNum = player[currentPlayer].playerRandomDiceNum;	// outputting the number to the seven segment display
+			stage = 1;
+			if (gameDebug)	{	led_out(stage);	}								// OOOOOOOx
+		}
+		
+		// ------------------------------ STAGE 2 ------------------------------
+		// if the current player lost: When the other players thinking the current player is lying
+		if(PING & (1<<PG1) && (tmpHealthButtonState != 1) && (stage == 1))
+		{
+			tmpHealthButtonState = 1;
+			stage = 2;
+			if (gameDebug)	{	led_out(stage | 0x20);	}						// OOxOOOxO
+		}
+		// if the current player lost: When the other players thinking the current player is lying
+		if(PING & (1<<PG2) && (tmpHealthButtonState != 1) && (stage == 1))
+		{
+			tmpHealthButtonState = 1;
+			player[currentPlayer].playerHealth--;
+			stage = 2;
+			if (gameDebug)	{	led_out(stage | 0x80);	}						// OxOOOOxO
+		}
+		// if the current player won: Then when the next player is the current he has one less health
+		if(PING & (1<<PG3) && (tmpHealthButtonState != 1) && (stage == 1))
+		{
+			tmpHealthButtonState = 1;
+			tmpNextPlayerHasLost = 1;
+			stage = 2;
+			if (gameDebug)	{	led_out(stage | 0x40);	}						// xOOOOOxO
+		}
+		
+		// ------------------------------ STAGE 3 ------------------------------
+		// this is only activates when the dice has been rolled and when the current player has pressed the corresponding button for health
+		if (stage == 2)
+		{
+			actRound++;									// next round
+			currentPlayer++;							// next player
+
+			if (currentPlayer > numberOfPlayers - 1)	// check if the dice has come around
+			{
+				currentPlayer = 0;
+			}
+
+			// reseting stage and all temp variables for the next round
+			tmpDiceButtonState = 0;
+			tmpHealthButtonState = 0;
+			tmpNextPlayerHasLost = 0;
+			tmpPreviousDice = 0;
+			stage = 0;
+		}
+
+		if(PING & (1<<PG4) && (tmpHealthButtonState != 1))
+		{
+			tmpHealthButtonState = 1;
+			if (gameDebug)	{	led_out(0xFF);	}								// xxxxxxxx
+			gameplay = 0;
+		}
+	}
+	if (gameDebug)	{	led_out(0x00);	}										// OOOOOOOO
+	sevenSegmentNum = 0;
+	gameplay = 1;
+	actRound = 0;
+	stage = 0;
+	currentPlayer = 0;
+	tmpPreviousDice = 0;
+	tmpDiceButtonState = 0;
+	tmpHealthButtonState = 0;
+	tmpNextPlayerHasLost = 0;
 }

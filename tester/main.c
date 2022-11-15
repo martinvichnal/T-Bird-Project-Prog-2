@@ -22,7 +22,12 @@ int main()
         //brightnessDividing(r, g, b, brightness);
     }*/
 
-    int asd = bit();
+    int test = bit();
+
+    int test2 = 0;
+    int stage = 0x02;
+    test2 = stage | 0x80;
+
 
     return 0;
 }
@@ -32,8 +37,10 @@ int bit()
     int testnum = 0x7FFFFFF6;	// 0x3363
     int dice = 0;
 
-	testnum &= ~(0x7FFFFF80);
-	dice = testnum;
+	//testnum &= ~(0x7FFFFF80);
+	//dice = testnum;
+
+	dice = (testnum % 5);
     return dice;
 }
 

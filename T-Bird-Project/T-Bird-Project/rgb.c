@@ -80,6 +80,22 @@ void rgb_pwm_handling()
 }
 
 
+void rgb_gameLights(uint8_t health)
+{
+	switch(health)
+	{
+		case 5:		rgb_Show(0, 255, 0, 255);
+		case 4:		rgb_Show(20, 255, 0, 255);
+		case 3:		rgb_Show(50, 150, 0, 255);
+		case 2:		rgb_Show(150, 50, 0, 255);
+		case 1:		rgb_Show(255, 0, 0, 255);
+		case 0:		rgb_Show(0, 0, 0, 0);
+		default:	rgb_Show(0, 0, 0, 0);
+	}
+
+}
+
+
 void rgb_Rainbow()
 {
 	while (g < 100)
