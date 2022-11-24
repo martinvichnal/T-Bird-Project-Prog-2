@@ -5,6 +5,8 @@
  *  Author: marti
  */ 
 
+// Driving the 8 leds with custom function.
+
 #define F_CPU 16000000L
 
 #include <avr/io.h>

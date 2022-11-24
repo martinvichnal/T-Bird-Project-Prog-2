@@ -156,12 +156,6 @@
     <Compile Include="delay.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="lcd.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lcd.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="led.c">
       <SubType>compile</SubType>
     </Compile>

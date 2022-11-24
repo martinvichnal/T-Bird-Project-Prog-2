@@ -1,9 +1,17 @@
+//**********************************************************************************//
+//	Current Issues:	- RGB Red led is not working. Something with PWM signal ?		//
+//					- Random number generator is not so random for some reason ?	//
+//**********************************************************************************//
+
+
 #define F_CPU 16000000L
 
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+//****************************************************
+// Importing custom made libraries for smooth operation
 #include "delay.h"
 #include "lcd.h"
 #include "led.h"
@@ -12,18 +20,20 @@
 #include "rnd.h"
 #include "sevenSegment.h"
 
-#define numberOfPlayers 5
-
+//***************************************
 // Initializing ports, timers, interrupts
 void init();
 uint8_t counter = 0;		// Counter for Timer 1
 
+//********************************************************************************
 // integer that sevenSegment_PutNumber() uses in Timer 1. /Can be change whenever/
 int sevenSegmentNum = 0;
 
+//******************************
 // Parameters, Function for game
 void game();
 
+#define numberOfPlayers 5
 int gameplay = 1;
 int actRound = 0;
 int stage = 0;						// this int checks if all the game stages has been played.
@@ -33,16 +43,16 @@ uint8_t tmpDiceButtonState = 0;		// temporary variable for pressing the dice but
 uint8_t tmpHealthButtonState = 0;	// temporary variable for pressing the WIN/LOSS button
 uint8_t tmpNextPlayerHasLost = 0;	// temporary variable for checking if the current player has won the round
 
-uint8_t gameDebug = 1;
+uint8_t gameDebug = 1;				// For debugging the gameplay through the 8 leds.	Change to 0 if debug is not needed
+// Debug information:	see below
 
-// Player struct
-struct playerState{
+struct playerState{					// Player struct that contains informations about player. Later it is created with an Array[currentPlayer] type
 	uint8_t playerID;
 	uint8_t playerHealth;
 	uint8_t playerRandomDiceNum;
 };
 
-
+//*******************************************************************
 // Menu region. Contains Menus, sub menus and their pointer variables
 #pragma region menu
 
@@ -81,23 +91,20 @@ struct menuState{
 #pragma endregion menu
 
 
-
-
-
-
-
+//************
 int main(void)
 {
 	init();
-	lcd_init();
 	
 	while (1)
 	{
+		// starting the game
 		game();
 	}
 }
 
 
+//******************************************
 // Timer 0 for controlling RGB LEDs with PWM
 ISR(TIMER0_OVF_vect)
 {
@@ -105,10 +112,12 @@ ISR(TIMER0_OVF_vect)
 }
 
 
+//**********************************************
 // Timer 1 mainly used for seven segment display
 ISR(TIMER1_OVF_vect)
 {
 	sevenSegment_PutNumber(sevenSegmentNum);
+	// This is just a heartbeat checker
 	//counter++;
 	//if (!counter)
 	//{
@@ -116,7 +125,8 @@ ISR(TIMER1_OVF_vect)
 	//}
 }
 
-// Initializing ports
+//************************************************************
+// Initializing the microprocessors pins, timers and i/o state
 void init()
 {
 	// 1 - output
@@ -146,19 +156,19 @@ void init()
 	DDRC |= 0x78;	// Matrix		->	01111000
 	
 	
-	// TIMER 0 INIT
+	// TIMER 0 INIT		** used for driving the leds with PWM signal **
 	TCCR0 = 0 << CS02 | 0 << CS01 | 1 << CS00;
 	TIMSK |= 1 << TOIE0;			// OverFlow enable
 	sei();							// Set Enable Interrupt
 	
-	// TIMER 1 INIT
+	// TIMER 1 INIT		** used for driving the seven segment display **
 	TCCR1B = 0 << CS12 | 0 << CS11 | 1 << CS10;
 	TIMSK |= 1 << TOIE1;			// OverFlow enable
 	sei();							// Set Enable Interrupt
 }
 
 
-
+//**************
 // Game function
 void game()
 {
@@ -175,7 +185,7 @@ void game()
 
 		rgb_gameLights(player[currentPlayer].playerHealth);					// Showing the current health of the player with RGB LEDs
 
-		// ------------------------------ STAGE 1 ------------------------------
+		// --------------------------------------------- STAGE 1 ---------------------------------------------
 		// Getting a dice number for the current player by pressing the 0. button
 		if(PING & (1<<PG0) && (tmpDiceButtonState != 1))
 		{
@@ -184,16 +194,16 @@ void game()
 			tmpPreviousDice = player[currentPlayer].playerRandomDiceNum;	// setting the "previous" dice number for the next round
 			sevenSegmentNum = player[currentPlayer].playerRandomDiceNum;	// outputting the number to the seven segment display
 			stage = 1;
-			if (gameDebug)	{	led_out(stage);	}								// OOOOOOOx
+			if (gameDebug)	{	led_out(stage);	}			// OOOOOOOx
 		}
 		
-		// ------------------------------ STAGE 2 ------------------------------
+		// --------------------------------------------- STAGE 2 ---------------------------------------------
 		// if the current player lost: When the other players thinking the current player is lying
 		if(PING & (1<<PG1) && (tmpHealthButtonState != 1) && (stage == 1))
 		{
 			tmpHealthButtonState = 1;
 			stage = 2;
-			if (gameDebug)	{	led_out(stage | 0x20);	}						// OOxOOOxO
+			if (gameDebug)	{	led_out(stage | 0x20);	}	// OOxOOOxO
 		}
 		// if the current player lost: When the other players thinking the current player is lying
 		if(PING & (1<<PG2) && (tmpHealthButtonState != 1) && (stage == 1))
@@ -201,7 +211,7 @@ void game()
 			tmpHealthButtonState = 1;
 			player[currentPlayer].playerHealth--;
 			stage = 2;
-			if (gameDebug)	{	led_out(stage | 0x80);	}						// OxOOOOxO
+			if (gameDebug)	{	led_out(stage | 0x80);	}	// OxOOOOxO
 		}
 		// if the current player won: Then when the next player is the current he has one less health
 		if(PING & (1<<PG3) && (tmpHealthButtonState != 1) && (stage == 1))
@@ -209,10 +219,10 @@ void game()
 			tmpHealthButtonState = 1;
 			tmpNextPlayerHasLost = 1;
 			stage = 2;
-			if (gameDebug)	{	led_out(stage | 0x40);	}						// xOOOOOxO
+			if (gameDebug)	{	led_out(stage | 0x40);	}	// xOOOOOxO
 		}
 		
-		// ------------------------------ STAGE 3 ------------------------------
+		// --------------------------------------------- STAGE 3 ---------------------------------------------
 		// this is only activates when the dice has been rolled and when the current player has pressed the corresponding button for health
 		if (stage == 2)
 		{
@@ -235,11 +245,12 @@ void game()
 		if(PING & (1<<PG4) && (tmpHealthButtonState != 1))
 		{
 			tmpHealthButtonState = 1;
-			if (gameDebug)	{	led_out(0xFF);	}								// xxxxxxxx
+			if (gameDebug)	{	led_out(0xFF);	}			// xxxxxxxx
 			gameplay = 0;
 		}
 	}
-	if (gameDebug)	{	led_out(0x00);	}										// OOOOOOOO
+	// When exiting the gameplay while it resets all the variables for a new gameplay.
+	if (gameDebug)	{	led_out(0x00);	}					// OOOOOOOO
 	sevenSegmentNum = 0;
 	gameplay = 1;
 	actRound = 0;

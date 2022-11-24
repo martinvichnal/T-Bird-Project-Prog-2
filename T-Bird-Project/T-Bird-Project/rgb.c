@@ -24,6 +24,7 @@ uint8_t pwm_counter = 0;
 uint8_t rgb_enable = 1;
 
 
+// Setting the RGB values for the PWM handler with the calculated brightness value
 void rgb_Show(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
 {
 	float x = 0;
@@ -35,10 +36,10 @@ void rgb_Show(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
 		pwm_green = (float)g / x;
 		pwm_blue = (float)b / x;
 	}
-
 }
 
-
+// PWM handler.
+// Turns on the leds when the pwm_counter is reached a custom "RGB" value
 void rgb_pwm_handling()
 {
 	if (rgb_enable)
@@ -79,7 +80,7 @@ void rgb_pwm_handling()
 	}
 }
 
-
+// Changing RGB colors related to the players health
 void rgb_gameLights(uint8_t health)
 {
 	switch(health)

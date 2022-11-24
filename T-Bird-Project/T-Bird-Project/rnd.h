@@ -5,6 +5,8 @@
  *  Author: marti
  */ 
 
+// Generating random values
+
 #define F_CPU 16000000L
 
 #include <avr/io.h>

@@ -24,6 +24,7 @@ int rnd_miaDice(int previousDice)
 		num1 = rnd_dice();
 		num2 = rnd_dice();
 		
+		// Setting the dice number according to Mias dice rule.
 		if (num1 > num2)
 		{
 			dice = (num1 * 10) + num2;
@@ -37,7 +38,8 @@ int rnd_miaDice(int previousDice)
 			dice = (num1 * 10) + num1;
 			bas = 1;
 		}
-
+		
+		// Checking if the dice number is a superior number than the normal numbers. For example 21, 44, 66
 		if (dice == 21)
 		{
 			untilItsGood = 0;

@@ -10,6 +10,7 @@
 uint8_t digit[4] = {0};
 int j = 0;
 
+// Setting the display with the right digit and number
 void sevenSegment_PutDigit(uint8_t digit, uint8_t num)
 {
 	if (digit > 3)
@@ -19,6 +20,8 @@ void sevenSegment_PutDigit(uint8_t digit, uint8_t num)
 
 	PORTA = 0x80 | (digit) << 4 | num;
 }
+
+// Dividing num into individual digits, and counting their corresponded digit places
 void sevenSegment_PutNumber(int num)
 {
 	digit[0] = num % 10;
