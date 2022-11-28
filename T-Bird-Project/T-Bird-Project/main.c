@@ -3,7 +3,6 @@
 //					- Random number generator is not so random for some reason ?	//
 //**********************************************************************************//
 
-
 #define F_CPU 16000000L
 
 #include <avr/io.h>
@@ -13,7 +12,6 @@
 //****************************************************
 // Importing custom made libraries for smooth operation
 #include "delay.h"
-#include "lcd.h"
 #include "led.h"
 #include "matrix.h"
 #include "rgb.h"
@@ -95,6 +93,7 @@ struct menuState{
 int main(void)
 {
 	init();
+	rgb_Show(0, 255, 0, 255);
 	
 	while (1)
 	{
