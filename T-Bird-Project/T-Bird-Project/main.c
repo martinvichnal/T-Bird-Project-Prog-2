@@ -1,8 +1,3 @@
-//**********************************************************************************//
-//	Current Issues:	- RGB Red led is not working. Something with PWM signal ?		//
-//					- Random number generator is not so random for some reason ?	//
-//**********************************************************************************//
-
 #define F_CPU 16000000L
 
 #include <avr/io.h>
@@ -116,11 +111,13 @@ ISR(TIMER0_OVF_vect)
 ISR(TIMER1_OVF_vect)
 {
 	sevenSegment_PutNumber(sevenSegmentNum);
+	int tmp = rnd_dice();					// updateing the rnd function
 	// This is just a heartbeat checker
 	//counter++;
 	//if (!counter)
 	//{
-	//	  PORTD ^= (1 << PB7); // flips the state of PD6
+		  ////PORTD ^= (1 << PB7); // flips the state of PD6
+		  //rnd_update_randomNum();
 	//}
 }
 
@@ -212,7 +209,7 @@ void game()
 			stage = 2;
 			if (gameDebug)	{	led_out(stage | 0x80);	}	// OxOOOOxO
 		}
-		// if the current player won: Then when the next player is the current he has one less health
+		// if the current player won: Then when the next player is the current and he has one less health
 		if(PING & (1<<PG3) && (tmpHealthButtonState != 1) && (stage == 1))
 		{
 			tmpHealthButtonState = 1;
